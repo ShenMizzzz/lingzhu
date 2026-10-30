@@ -30,24 +30,34 @@ body[data-env="island"]{--bg:#e9f6f8;--acc:#2f9fb0;--soft:#d3edf1}
   padding-bottom:calc(env(safe-area-inset-bottom) + 6px);transition:background .5s ease}
 #top{background:var(--card);border-bottom:1px solid var(--line);z-index:5;flex:0 0 auto}
 #topbar{position:relative;display:flex;align-items:center;justify-content:space-between;
-  height:46px;padding:0 10px}
-#topbar .side{display:flex;align-items:center;gap:6px}
+  height:44px;padding:0 8px}
+#topbar .side{display:flex;align-items:center;gap:4px}
 #title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  font-size:16px;font-weight:700;letter-spacing:3px;color:var(--acc);white-space:nowrap}
-.tbtn{font:inherit;font-size:12.5px;padding:5px 10px;border-radius:10px;
+  font-size:15px;font-weight:700;letter-spacing:2px;color:var(--acc);white-space:nowrap}
+.tbtn{font:inherit;font-size:12px;padding:4px 9px;border-radius:9px;
   border:1px solid var(--line);background:var(--soft);color:var(--ink)}
-.tbtn.rnd{width:28px;height:28px;padding:0;border-radius:50%;display:flex;
-  align-items:center;justify-content:center;font-size:14px}
-#bar{display:flex;align-items:center;gap:10px;padding:5px 12px 7px;
-  font-size:12.5px;color:var(--sub);border-top:1px dashed var(--line);white-space:nowrap;overflow-x:auto}
+.tbtn.rnd{width:25px;height:25px;padding:0;border-radius:50%;display:flex;
+  align-items:center;justify-content:center;font-size:13px;line-height:1}
+
+#bar{display:flex;align-items:center;gap:10px;padding:4px 12px 5px;
+  font-size:12.5px;color:var(--sub);white-space:nowrap;overflow-x:auto}
 #bar::-webkit-scrollbar{display:none}
 #barEnergy{margin-left:auto;font-size:13px;letter-spacing:2px;color:var(--gold)}
 #barEnergy i{font-style:normal;opacity:.22}
 #barEnergy i.on{opacity:1}
 
+#resbar{flex:0 0 auto;display:flex;align-items:center;gap:11px;padding:5px 12px 7px;
+  background:var(--card);border-top:1px dashed var(--line);
+  font-size:12px;color:var(--sub);overflow-x:auto;white-space:nowrap}
+#resbar::-webkit-scrollbar{display:none}
+#resbar .rb{display:inline-flex;align-items:baseline;gap:2px}
+#resbar .rb b{font-size:13.5px;font-weight:700;color:var(--ink);
+  font-variant-numeric:tabular-nums}
+#resbar .rb i{font-style:normal;font-size:11px;color:var(--sub)}
+
 #narrative{flex:1;min-height:0;height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
   padding:14px 14px 22px}
-#narrative p{margin-bottom:9px;font-size:14.5px}
+#narrative p{margin-bottom:9px;font-size:14.5px;word-break:break-word;overflow-wrap:anywhere}
 #narrative p.sys{color:var(--sub);font-size:13px;background:var(--card);
   border-left:3px solid var(--line);border-radius:0 10px 10px 0;padding:8px 10px}
 #narrative p.warn{color:var(--warn);border-left-color:var(--warn)}
@@ -103,27 +113,36 @@ body[data-env="island"]{--bg:#e9f6f8;--acc:#2f9fb0;--soft:#d3edf1}
 .sub{color:var(--sub);font-size:12.5px}
 .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .btn{font:inherit;font-size:13.5px;padding:9px 15px;border-radius:12px;border:1px solid var(--acc);
-  background:var(--acc);color:#fff;font-weight:600;transition:.15s}
+  background:var(--acc);color:#fff;font-weight:600;transition:.15s;white-space:nowrap}
 .btn:active{transform:scale(.97)}
 .btn:disabled{opacity:.4}
 .btn.ghost{background:transparent;color:var(--acc)}
 .btn.gray{background:var(--soft);border-color:var(--line);color:var(--ink);font-weight:400}
 .btn.sm{font-size:12px;padding:6px 11px;border-radius:9px}
 
-#mask{position:fixed;inset:0;background:rgba(30,26,18,.5);z-index:40;display:none;
-  align-items:center;justify-content:center;padding:22px}
+#mask{position:fixed;inset:0;background:rgba(30,26,18,.55);z-index:40;display:none;
+  align-items:center;justify-content:center;padding:18px}
 #mask.on{display:flex}
-#mbox{background:var(--card);border-radius:20px;padding:20px;width:100%;max-width:340px;
-  max-height:82vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  box-shadow:0 16px 50px rgba(0,0,0,.22)}
-#mtext{font-size:14.5px;margin-bottom:16px;line-height:1.65}
-#mbtns{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
-#mbtns.col{flex-direction:column;align-items:stretch;flex-wrap:nowrap}
-#mbtns.col .btn{width:100%;text-align:left;padding:11px 14px;font-weight:400;
-  font-size:13.5px;line-height:1.45;border-radius:12px}
-.mtitle{font-size:16px;font-weight:700;margin-bottom:8px;color:var(--ink);letter-spacing:1px}
+#mbox{background:var(--card);border-radius:20px;width:100%;max-width:380px;
+  max-height:86vh;display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 18px 60px rgba(0,0,0,.26)}
+#mtext{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:20px 20px 10px;font-size:14.5px;line-height:1.7;
+  word-break:break-word;overflow-wrap:anywhere}
+#mbtns{flex:0 0 auto;padding:12px 16px 16px;border-top:1px solid var(--line);
+  display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+#mbtns.vert{display:block}
+#mbtns.vert .btn{display:block;width:100%;text-align:left;white-space:normal;
+  padding:12px 14px;margin-bottom:8px;border-radius:12px;
+  font-weight:400;font-size:14px;line-height:1.5;word-break:break-word;
+  background:var(--soft);border-color:var(--line);color:var(--ink)}
+#mbtns.vert .btn:active{background:var(--line)}
+#mbtns.vert .btn:last-child{margin-bottom:0}
+.mtitle{font-size:16px;font-weight:700;margin-bottom:8px;color:var(--ink);
+  letter-spacing:1px;line-height:1.4}
 .mtag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:8px;
   background:var(--soft);color:var(--acc);margin-bottom:8px;letter-spacing:1px}
+.mdesc{font-size:13.5px;color:#4a4a46;line-height:1.75}
 
 .map{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
 .node{border:1px solid var(--line);border-radius:12px;padding:9px 5px;text-align:center;
@@ -143,7 +162,8 @@ body[data-env="island"]{--bg:#e9f6f8;--acc:#2f9fb0;--soft:#d3edf1}
 .bar{height:7px;border-radius:4px;background:var(--soft);overflow:hidden;margin-top:6px}
 .bar i{display:block;height:100%;background:var(--acc);border-radius:4px;transition:width .4s}
 
-.chatmsg{padding:7px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+.chatmsg{padding:7px 0;border-bottom:1px dashed var(--line);font-size:13.5px;
+  word-break:break-word;overflow-wrap:anywhere}
 .chatmsg .who{color:var(--acc);font-weight:600}
 .chatmsg .me .who{color:var(--gold)}
 #chatin{display:flex;gap:8px;margin-top:12px}
@@ -152,8 +172,8 @@ body[data-env="island"]{--bg:#e9f6f8;--acc:#2f9fb0;--soft:#d3edf1}
 #chatin button{font:inherit;font-size:13.5px;padding:0 16px;border-radius:12px;border:0;
   background:var(--acc);color:#fff;font-weight:600}
 
-#helppage .pbody h3{font-size:14.5px;margin:16px 0 6px;color:var(--acc)}
-#helppage .pbody p{font-size:13.5px;color:#4a4a46;margin-bottom:8px}
+#helppage .pbody h3,#setpage .pbody h3{font-size:14.5px;margin:16px 0 6px;color:var(--acc)}
+#helppage .pbody p,#setpage .pbody p{font-size:13.5px;color:#4a4a46;margin-bottom:8px}
 #saveio .pbody textarea{width:100%;height:190px;font-size:12px;padding:10px;border-radius:12px;
   border:1px solid var(--line);background:var(--soft);color:var(--ink);resize:none}
 
@@ -192,6 +212,7 @@ body[data-env="island"]{--bg:#e9f6f8;--acc:#2f9fb0;--soft:#d3edf1}
         <button id="tagmk" class="tbtn">交易</button>
         <button id="bgmbtn" class="tbtn rnd">♪</button>
         <button id="helpbtn" class="tbtn rnd">?</button>
+        <button id="setbtn" class="tbtn rnd">⚙</button>
       </div>
     </div>
     <div id="bar">
@@ -199,6 +220,13 @@ body[data-env="island"]{--bg:#e9f6f8;--acc:#2f9fb0;--soft:#d3edf1}
       <span id="barEnv">森林</span>
       <span id="barPop">50 人</span>
       <span id="barEnergy">⚡⚡⚡</span>
+    </div>
+    <div id="resbar">
+      <span class="rb"><i>粮</i><b id="rbFood">400</b></span>
+      <span class="rb"><i>水</i><b id="rbWater">300</b></span>
+      <span class="rb"><i>木</i><b id="rbWood">300</b></span>
+      <span class="rb"><i>石</i><b id="rbStone">200</b></span>
+      <span class="rb"><i>金</i><b id="rbGold">500</b></span>
     </div>
   </header>
   <main id="narrative"></main>
@@ -233,6 +261,11 @@ body[data-env="island"]{--bg:#e9f6f8;--acc:#2f9fb0;--soft:#d3edf1}
 <section id="helppage" class="page">
   <div class="phead"><b class="ptitle">游戏攻略</b><button id="hclose" class="pclose">✕</button></div>
   <div class="pbody" id="helpbody"></div>
+</section>
+
+<section id="setpage" class="page">
+  <div class="phead"><b class="ptitle">设置</b><button id="setclose" class="pclose">✕</button></div>
+  <div class="pbody" id="setbody"></div>
 </section>
 
 <section id="saveio" class="page">
@@ -297,8 +330,8 @@ body[data-env="island"]{--bg:#e9f6f8;--acc:#2f9fb0;--soft:#d3edf1}
 
 <script>
 var S = null, busy = false, CR = null, curTab = 'act', curMapSel = -1, curWorld = 'ch';
-var NO_LOG = false, EVTMODE = 0;
-var SAVE_KEY = 'lingzhu_v16', SCHEMA = 17;
+var NO_LOG = false;
+var SAVE_KEY = 'lingzhu_v18', SCHEMA = 19;
 var LV_NAME = ['初级', '中级', '高级'];
 var LV_MUL = [1, 1.6, 2.4];
 
@@ -314,25 +347,26 @@ var ENV_FACTOR = {
 
 var ENV_RULE = {
   forest:{good:'伐木场 +20%，出征必得兽皮',bad:'树林遮眼，每天侦查次数 -1',
-    scout:-1, lumber:1.2, lootHide:true, event:0},
+    scout:-1, lumber:1.2, lootHide:true, waterNeed:1, event:0},
   plain:{good:'农田 +10%，人口长得快',bad:'无遮无挡，城墙效果打七折',
-    farm:1.1, popGrow:1.5, wall:0.7, event:0},
-  desert:{good:'视野开阔，侦查 +1 次，矿石翻倍',bad:'缺水，口粮消耗 +12%',
-    scout:1, ore:2, foodNeed:1.12, event:0},
+    farm:1.1, popGrow:1.5, wall:0.7, waterNeed:1, event:0},
+  desert:{good:'视野开阔，侦查 +1 次，矿石翻倍',bad:'极度缺水，耗水 +60%，建水井能撑住',
+    scout:1, ore:2, foodNeed:1.06, waterNeed:1.6, event:0},
   snow:{good:'敌人不适应，守备体力 -15%',bad:'严寒，每天多损耗 3% 存粮',
-    enemyHp:0.85, foodLoss:0.03, event:0},
+    enemyHp:0.85, foodLoss:0.03, waterNeed:0.8, event:0},
   swamp:{good:'瘴气掩护，出征损失 -20%',bad:'疫病流行，人口长得慢',
-    loss:0.8, popGrow:0.5, plague:0.15, event:0.05},
+    loss:0.8, popGrow:0.5, plague:0.15, waterNeed:0.8, event:0.05},
   grass:{good:'牧草丰美，战马产出翻倍',bad:'无遮无挡，更容易被袭击',
-    horse:2, raid:0.08, event:0.05},
+    horse:2, raid:0.08, waterNeed:1.1, event:0.05},
   hill:{good:'石料 +15%，城墙效果 +50%',bad:'运输困难，建造与升级耗材 +10%',
-    stone:1.15, wall:1.5, buildCost:1.1, event:0},
+    stone:1.15, wall:1.5, buildCost:1.1, waterNeed:1, event:0},
   island:{good:'渔获充足，粮食 +10%',bad:'与世隔绝，交易行买价 +12%，频道第 35 天才开',
-    food:1.1, price:1.12, channelDay:35, event:0}
+    food:1.1, price:1.12, channelDay:35, waterNeed:0.9, event:0}
 };
 
 var BUILD = {
   house:{name:'房屋',wood:100,stone:50,desc:'一座住一户人家，等级越高住得越多'},
+  well:{name:'水井',wood:60,stone:80,desc:'有水井才有干净水，沙漠里尤其要紧'},
   farm:{name:'农田',wood:50,stone:0,desc:'日产粮食，得有人住才种得开'},
   lumber:{name:'伐木场',wood:80,stone:20,desc:'日产木材，偶尔有猎户送皮子来'},
   quarry:{name:'采石场',wood:60,stone:40,desc:'日产石料，石缝里能剥出矿石'},
@@ -348,7 +382,7 @@ var SPECIAL = {
   market:{name:'市集',wood:150,stone:80,blue:'bp_market',job:'商人',out:'每日金币 +30'},
   stable:{name:'马厩',wood:250,stone:100,blue:'bp_stable',job:'驯马师',out:'每日战马 +1'},
   watch:{name:'瞭望塔',wood:180,stone:220,blue:'bp_watch',job:'斥候',out:'侦查不耗精力'},
-  shrine:{name:'神殿',wood:300,stone:300,blue:'bp_shrine',job:'祭司',out:'每日民心 +2，精力多回 1'}
+  shrine:{name:'神殿',wood:300,stone:300,blue:'bp_shrine',job:'祭司',out:'每日民心 +2，耗水 -15%'}
 };
 
 var ITEMS = {
@@ -403,6 +437,10 @@ var MAPTYPE = {
     snip:'地窖里还有存粮，屋梁拆下来能当木料。'},
   grove:{name:'密林',tag:'树影摇动',atk:4,def:4,hp:18,main:'wood',sub:['hide','food'],
     snip:'成片的树砍倒堆成垛，林子里还挂着几张旧皮子。'},
+  river:{name:'河湾',tag:'水声很响',atk:3,def:2,hp:14,main:'water',sub:['food','hide'],
+    snip:'河湾里水很清，能装好几车，岸边还晒着几张旧皮子。'},
+  cistern:{name:'暗河',tag:'洞口冒凉气',atk:7,def:7,hp:28,main:'water',sub:['ore','iron'],
+    snip:'顺着洞口下去是条地下河，水冷得刺骨，河滩上散着碎矿。'},
   nest:{name:'魔巢',tag:'空气发涩',atk:11,def:8,hp:38,main:'gem',sub:['iron','coal'],
     snip:'巢里铺着一层发光的碎晶，边角堆着被啃过的铁块和煤。'}
 };
@@ -442,6 +480,9 @@ function fmt(n){
   if(n >= 100000) return (n / 10000).toFixed(1) + '万';
   return String(n);
 }
+function safe(fn){
+  try{ fn(); }catch(e){}
+}
 function rule(){
   if(!S) return ENV_RULE.forest;
   return ENV_RULE[S.env] || ENV_RULE.forest;
@@ -455,8 +496,8 @@ function say(text, cls){
   box.appendChild(p);
   box.scrollTop = box.scrollHeight;
   if(S && Array.isArray(S.log) && !NO_LOG){
-    S.log.push({ t: text, c: cls || '' });
-    if(S.log.length > 200) S.log = S.log.slice(-200);
+    S.log.push({ t: String(text), c: cls || '' });
+    if(S.log.length > 160) S.log = S.log.slice(-160);
   }
 }
 function sayDay(){
@@ -469,6 +510,7 @@ function renderLog(){
   if(!S || !Array.isArray(S.log)) return;
   var frag = document.createDocumentFragment();
   S.log.forEach(function(x){
+    if(!x || typeof x.t !== 'string') return;
     var p = document.createElement('p');
     if(x.c) p.className = x.c;
     p.innerHTML = esc(x.t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
@@ -496,10 +538,12 @@ function toast(msg){
 /* ================= 弹窗 ================= */
 function modal(html, btns, vertical){
   $('mtext').innerHTML = html;
+  $('mtext').scrollTop = 0;
   var box = $('mbtns');
   box.innerHTML = '';
-  box.className = vertical ? 'col' : '';
+  box.className = vertical ? 'vert' : '';
   var list = btns || [{ t: '知道了' }];
+  if(!list.length) list = [{ t: '知道了' }];
   for(var i = 0; i < list.length; i++){
     (function(b){
       var el = document.createElement('button');
@@ -518,7 +562,6 @@ function modal(html, btns, vertical){
     })(list[i]);
   }
   $('mask').classList.add('on');
-  $('mbox').scrollTop = 0;
 }
 function closeModal(){
   $('mask').classList.remove('on');
@@ -540,7 +583,7 @@ function newGame(){
     },
     day: 1,
     env: env,
-    res: { gold: 500, wood: 300, stone: 200, food: foodBase },
+    res: { gold: 500, wood: 300, stone: 200, food: foodBase, water: 300 },
     pop: 50,
     troops: {
       militia: { n: 0, lv: 1, exp: 0 },
@@ -553,6 +596,7 @@ function newGame(){
     morale: 50,
     builds: {
       house: [1, 1, 1, 1, 1],
+      well: [],
       farm: [1, 1, 1, 1, 1, 1],
       lumber: [],
       quarry: [],
@@ -664,7 +708,7 @@ function repair(d){
   if(!Array.isArray(d.log)) d.log = [];
   d.log = d.log.filter(function(x){
     return x && typeof x.t === 'string';
-  }).slice(-200);
+  }).slice(-160);
   if(typeof d.scout !== 'number') d.scout = 3;
   return d;
 }
@@ -1003,6 +1047,20 @@ function wallDef(){
 }
 function costMod(){ return rule().buildCost || 1; }
 
+function waterProd(){
+  var w = 0;
+  S.builds.well.forEach(function(lv){
+    w += 50 * (1 + (lv - 1) * 0.35);
+  });
+  return Math.round(w);
+}
+function waterNeed(){
+  var n = S.pop * 0.5 + troopTotal() * 0.5 + S.heroes.length * 1;
+  n *= (rule().waterNeed || 1);
+  if(S.special.shrine) n *= 0.85;
+  return Math.round(n);
+}
+
 function prod(){
   var f = ENV_FACTOR[S.env];
   var r = rule();
@@ -1040,6 +1098,7 @@ function prod(){
 
   return {
     food: Math.round(food),
+    water: waterProd(),
     wood: Math.round(wood),
     stone: Math.round(stone),
     gold: S.special.market ? Math.round(30 * specialRate('market')) : 0,
@@ -1224,9 +1283,7 @@ function openSheet(title, html, after){
   $('sheet').classList.add('on');
   $('scrim').classList.add('on');
   $('sbody').scrollTop = 0;
-  if(after){
-    try{ after(); }catch(e){}
-  }
+  if(after) safe(after);
 }
 function closeSheet(){
   $('sheet').classList.remove('on');
@@ -1243,6 +1300,11 @@ function renderBar(){
     e += '<i class="' + (i < S.energy.cur ? 'on' : '') + '">⚡</i>';
   }
   $('barEnergy').innerHTML = e;
+  $('rbFood').textContent = fmt(S.res.food);
+  $('rbWater').textContent = fmt(S.res.water);
+  $('rbWood').textContent = fmt(S.res.wood);
+  $('rbStone').textContent = fmt(S.res.stone);
+  $('rbGold').textContent = fmt(S.res.gold);
   document.body.setAttribute('data-env', S.env);
 }
 
@@ -1251,7 +1313,9 @@ function renderAttr(){
   var eq = lordEq();
   var p = prod();
   var need = foodNeed();
+  var wNeed = waterNeed();
   var net = p.food - need;
+  var wNet = p.water - wNeed;
   var r = rule();
   var html = '';
 
@@ -1267,7 +1331,8 @@ function renderAttr(){
   html += '<div class="sub" style="color:#3f8f4a">' + r.good + '</div>';
   html += '<div class="sub" style="color:#c4483f;margin-top:4px">' + r.bad + '</div>';
   html += '<div class="sub" style="margin-top:6px">粮 ×' + ENV_FACTOR[S.env].food +
-    '　木 ×' + ENV_FACTOR[S.env].wood + '　石 ×' + ENV_FACTOR[S.env].stone + '</div>';
+    '　木 ×' + ENV_FACTOR[S.env].wood + '　石 ×' + ENV_FACTOR[S.env].stone +
+    '　耗水 ×' + (r.waterNeed || 1) + '</div>';
   html += '</div>';
 
   html += '<div class="card">';
@@ -1280,23 +1345,23 @@ function renderAttr(){
   html += '</div>';
 
   html += '<div class="card">';
-  html += '<h4>领地</h4>';
-  html += line('金币', fmt(S.res.gold));
-  html += line('木材', fmt(S.res.wood));
-  html += line('石料', fmt(S.res.stone));
-  html += line('粮食', fmt(S.res.food));
+  html += '<h4>家底</h4>';
   html += line('人口', S.pop + ' / ' + houseCap());
   html += line('兵力', troopTotal() + ' 人');
   html += line('英雄', S.heroes.length + ' 位');
   html += line('人才', S.talents.length + ' 人');
   html += line('民心', Math.round(S.morale) + ' / 100　' +
     (moraleAtk() > 1 ? '士气高' : (moraleAtk() < 1 ? '士气低' : '平常')));
+  html += line('城墙防御', wallDef() || '无');
   html += '</div>';
 
   html += '<div class="card">';
   html += '<h4>每日收支</h4>';
   html += line('粮产 / 口粮', '+' + p.food + ' / -' + need +
     '　<span class="sub">净 ' + (net >= 0 ? '+' : '') + net + '</span>');
+  html += line('水井 / 耗水', '+' + p.water + ' / -' + wNeed +
+    '　<span class="sub">净 ' + (wNet >= 0 ? '+' : '') + wNet + '</span>' +
+    (wNeed > p.water ? '　缺水' : ''));
   html += line('木材', '+' + p.wood);
   html += line('石料', '+' + p.stone);
   if(p.gold) html += line('金币', '+' + p.gold);
@@ -1323,6 +1388,7 @@ function renderAttr(){
 /* ================= 建筑产出表 ================= */
 var BUILD_OUT = {
   house:    { main: '住人',     sub: '—' },
+  well:     { main: '水',       sub: '—' },
   farm:     { main: '粮食',     sub: '—' },
   lumber:   { main: '木材',     sub: '兽皮' },
   quarry:   { main: '石料',     sub: '矿石' },
@@ -1982,8 +2048,8 @@ function doPromote(k){
 /* ===== 第 5 批到此结束，第 6 批接在这一行下面 ===== */
 
 /* ================= 地图 ================= */
-var RES_NAME = { gold: '金币', wood: '木材', stone: '石料', food: '粮食' };
-var RES_IDS = ['gold', 'wood', 'stone', 'food'];
+var RES_NAME = { gold: '金币', wood: '木材', stone: '石料', food: '粮食', water: '水' };
+var RES_IDS = ['gold', 'wood', 'stone', 'food', 'water'];
 var pickHero = null;
 var BOXES = [
   { name: '青铜箱', w: 70,  lo: 40,  hi: 120,  item: 0.25, bp: 0 },
@@ -2078,6 +2144,7 @@ function baseAmount(id, lv){
   if(id === 'wood') return Math.round(rf(80, 160) * k);
   if(id === 'stone') return Math.round(rf(70, 140) * k);
   if(id === 'food') return Math.round(rf(60, 120) * k);
+  if(id === 'water') return Math.round(rf(90, 180) * k);
   if(id === 'pop') return ri(1, 2);
   if(id === 'gem') return Math.max(1, Math.round(rf(1, 2) * k));
   if(id === 'charm') return 1;
@@ -2304,6 +2371,7 @@ var EVENTS = [
   { t: '几户人家看这边安稳，搬了过来。', f: function(){ S.pop = Math.min(houseCap(), S.pop + ri(2, 5)); } },
   { t: '山坡上塌了半面，露出不少好石头。', f: function(){ S.res.stone += 80; } },
   { t: '有人在河湾砍了倒木，拉回来一堆。', f: function(){ S.res.wood += 90; } },
+  { t: '下了一场透雨，水缸都满了。', f: function(){ S.res.water += 120; } },
   { t: '你翻出一坛旧酒，和几个老兵分了。', f: function(){ S.morale = clamp(S.morale + 6, 0, 100); } }
 ];
 
@@ -2314,6 +2382,8 @@ function doEndDay(){
   try{
     var p = prod();
     var need = foodNeed();
+    var wNeed = waterNeed();
+
     S.res.wood += p.wood;
     S.res.stone += p.stone;
     S.res.gold += p.gold;
@@ -2326,8 +2396,10 @@ function doEndDay(){
     }
 
     S.res.food += p.food - need;
+    S.res.water += p.water - wNeed;
 
     sayDay();
+
     if(S.res.food < 0){
       S.res.food = 0;
       var lost = Math.max(1, Math.round(S.pop * 0.12));
@@ -2345,6 +2417,22 @@ function doEndDay(){
       }
       S.morale = clamp(S.morale + (S.special.shrine ? 2 : 1), 0, 100);
     }
+
+    if(S.res.water < 0){
+      S.res.water = 0;
+      var extra = Math.round(need * 0.3);
+      S.res.food = Math.max(0, S.res.food - extra);
+      var lp0 = Math.max(1, Math.round(S.pop * 0.05));
+      S.pop = Math.max(1, S.pop - lp0);
+      S.morale = clamp(S.morale - 5, 0, 100);
+      say('水缸见了底。' + lp0 + ' 口人收拾东西走了，粮食也多耗了 ' + extra + ' 份。', 'warn');
+      AUDIO.play('fail');
+    }else if(p.water > 0){
+      say('水井打上来 ' + p.water + ' 桶水，用掉 ' + wNeed + ' 桶。');
+    }else if(wNeed > 0){
+      say('没有水井，' + wNeed + ' 桶水全靠外面挑。');
+    }
+
     if(p.wood) say('木材 +' + p.wood + '。');
     if(p.stone) say('石料 +' + p.stone + '。');
     if(p.iron) say('精铁 +' + p.iron + '。');
@@ -2368,7 +2456,7 @@ function doEndDay(){
     if(chance(0.5)){
       var ev = pick(EVENTS);
       say(ev.t, 'sys');
-      ev.f();
+      safe(ev.f);
     }
 
     raidCheck();
@@ -2462,7 +2550,7 @@ function renderChannel(){
     html += '<div class="chatmsg' + (m.me ? ' me' : '') + '"><span class="who">' +
       esc(m.who) + '</span>　' + esc(m.text) + '</div>';
   }
-  html += '<div id="chatin"><input id="chtext" maxlength="40" placeholder="说点什么" />' +
+  html += '<div id="chatin"><input id="chtext" maxlength="60" placeholder="说点什么" />' +
     '<button id="chsend">发</button></div>';
   box.innerHTML = html;
   $('chsend').onclick = sendChannel;
@@ -2514,9 +2602,9 @@ function makeLot(){
       seller: pick(NPC_LORDS)
     };
   }
-  var res = pick(['wood', 'stone', 'food']);
-  var n = ri(60, 180);
-  var unit = { wood: 1.1, stone: 1.2, food: 0.9 }[res];
+  var res = pick(['wood', 'stone', 'food', 'water']);
+  var n = res === 'water' ? ri(80, 200) : ri(60, 180);
+  var unit = { wood: 1.1, stone: 1.2, food: 0.9, water: 0.7 }[res];
   return {
     id: 'lot' + Date.now() + ri(1, 999),
     kind: 'res', key: res, n: n,
@@ -2573,19 +2661,86 @@ function buyLot(i){
   renderMarket();
 }
 
-/* ================= 自由行动 ================= */
+/* ================= AI 配置 ================= */
+var AI_PROVIDERS = [
+  { n: 'DeepSeek', b: 'https://api.deepseek.com/chat/completions', m: 'deepseek-chat' },
+  { n: '智谱', b: 'https://open.bigmodel.cn/api/paas/v4/chat/completions', m: 'glm-4-flash', f: true },
+  { n: '通义', b: 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', m: 'qwen-turbo' },
+  { n: 'Kimi', b: 'https://api.moonshot.cn/v1/chat/completions', m: 'moonshot-v1-8k' },
+  { n: '硅基流动', b: 'https://api.siliconflow.cn/v1/chat/completions', m: 'Qwen/Qwen2.5-7B-Instruct', f: true },
+  { n: '文心', b: 'https://qianfan.baidubce.com/v2/chat/completions', m: 'ernie-speed-128k', f: true },
+  { n: '混元', b: 'https://api.hunyuan.cloud.tencent.com/v1/chat/completions', m: 'hunyuan-lite', f: true },
+  { n: '星火', b: 'https://spark-api-open.xf-yun.com/v1/chat/completions', m: 'lite', f: true },
+  { n: '阶跃', b: 'https://api.stepfun.com/v1/chat/completions', m: 'step-1-8k' },
+  { n: '百川', b: 'https://api.baichuan-ai.com/v1/chat/completions', m: 'Baichuan4-Air' },
+  { n: '零一', b: 'https://api.lingyiwanwu.com/v1/chat/completions', m: 'yi-lightning' },
+  { n: '商汤', b: 'https://api.sensenova.cn/compatible-mode/v1/chat/completions', m: 'SenseChat-5' },
+  { n: 'MiniMax', b: 'https://api.minimax.chat/v1/text/chatcompletion_v2', m: 'abab6.5s-chat' },
+  { n: 'OpenAI', b: 'https://api.openai.com/v1/chat/completions', m: 'gpt-4o-mini' },
+  { n: 'Gemini', b: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', m: 'gemini-2.0-flash', f: true },
+  { n: 'Groq', b: 'https://api.groq.com/openai/v1/chat/completions', m: 'llama-3.3-70b-versatile', f: true },
+  { n: 'Cerebras', b: 'https://api.cerebras.ai/v1/chat/completions', m: 'llama3.1-8b', f: true },
+  { n: 'Mistral', b: 'https://api.mistral.ai/v1/chat/completions', m: 'mistral-small-latest' },
+  { n: 'Together', b: 'https://api.together.xyz/v1/chat/completions', m: 'meta-llama/Llama-3.3-70B-Instruct-Turbo' },
+  { n: 'Fireworks', b: 'https://api.fireworks.ai/inference/v1/chat/completions', m: 'accounts/fireworks/models/llama-v3p3-70b-instruct' },
+  { n: 'DeepInfra', b: 'https://api.deepinfra.com/v1/openai/chat/completions', m: 'meta-llama/Meta-Llama-3.1-8B-Instruct' },
+  { n: 'xAI', b: 'https://api.x.ai/v1/chat/completions', m: 'grok-2-latest' },
+  { n: 'Perplexity', b: 'https://api.perplexity.ai/chat/completions', m: 'sonar' },
+  { n: 'Hyperbolic', b: 'https://api.hyperbolic.xyz/v1/chat/completions', m: 'meta-llama/Meta-Llama-3.1-70B-Instruct' },
+  { n: 'OpenRouter', b: 'https://openrouter.ai/api/v1/chat/completions', m: 'openai/gpt-4o-mini', f: true },
+  { n: 'Ollama', b: 'http://localhost:11434/v1/chat/completions', m: 'llama3.2', f: true },
+  { n: 'LM Studio', b: 'http://localhost:1234/v1/chat/completions', m: 'local-model', f: true }
+];
+
+var LEN_MAP = {
+  long:  { name: '长', min: 1000, max: 1200, tokens: 2600 },
+  mid:   { name: '中', min: 800,  max: 1000, tokens: 2200 },
+  short: { name: '短', min: 600,  max: 800,  tokens: 1800 }
+};
+
+var DEF_BASE = 'https://api.deepseek.com/chat/completions';
+var DEF_MODEL = 'deepseek-chat';
+var KEY_IN_STYLE = 'width:100%;font:inherit;font-size:14px;padding:10px 12px;' +
+  'border-radius:11px;border:1px solid var(--line);background:var(--soft);color:var(--ink)';
+
 function dsKey(){
   try{ return localStorage.getItem('ds_key') || ''; }catch(e){ return ''; }
 }
 function setKey(k){
   try{ localStorage.setItem('ds_key', k || ''); }catch(e){}
 }
-var KEY_IN_STYLE = 'width:100%;font:inherit;font-size:14px;padding:10px 12px;' +
-  'border-radius:11px;border:1px solid var(--line);background:var(--soft);color:var(--ink)';
+function aiBase(){
+  try{ return localStorage.getItem('ai_base') || DEF_BASE; }catch(e){ return DEF_BASE; }
+}
+function aiModel(){
+  try{ return localStorage.getItem('ai_model') || DEF_MODEL; }catch(e){ return DEF_MODEL; }
+}
+function setApi(b, m){
+  try{
+    localStorage.setItem('ai_base', (b || '').trim() || DEF_BASE);
+    localStorage.setItem('ai_model', (m || '').trim() || DEF_MODEL);
+  }catch(e){}
+}
+function lenRaw(){
+  try{ return localStorage.getItem('ai_len') || ''; }catch(e){ return ''; }
+}
+function setLen(v){
+  try{ localStorage.setItem('ai_len', LEN_MAP[v] ? v : 'mid'); }catch(e){}
+}
+function aiLen(){
+  var v = lenRaw();
+  return LEN_MAP[v] || LEN_MAP.mid;
+}
+
+/* ================= 首次弹窗 ================= */
 function askKey(){
-  modal('<div class="sub" style="margin-bottom:10px">要不要接一个 AI 当旁白？' +
-    '接了以后，你打的字有人接，每天的事也可能是它现编的。不接也能玩，以后随时在「?」里改。</div>' +
-    '<input id="keyin" type="text" placeholder="粘贴 DeepSeek 密钥" style="' + KEY_IN_STYLE + '" />', [
+  modal('<div class="mtag">AI 旁白</div>' +
+    '<div class="mtitle">要不要接一个旁白</div>' +
+    '<div class="mdesc">接了以后，你在底部打的字会有人接，每天路上遇见的事也可能是它现编的。' +
+    '不填也能玩，只是没人应声。</div>' +
+    '<div class="sub" style="margin-top:10px;font-size:12px;color:#8a8a86">' +
+    '这里按 DeepSeek 填。想换别家、想改回复长短，去右上角「⚙」里改。</div>' +
+    '<input id="keyin" type="text" placeholder="粘贴密钥，sk- 开头的那串" style="margin-top:10px;' + KEY_IN_STYLE + '" />', [
     { t: '先不接', gray: true },
     {
       t: '保存',
@@ -2598,44 +2753,83 @@ function askKey(){
     }
   ]);
 }
+function askLen(cb){
+  modal('<div class="mtag">AI 旁白</div>' +
+    '<div class="mtitle">回复长短</div>' +
+    '<div class="mdesc">旁白每次回你多长的段落。长一些慢、费额度，短一些快、省。</div>' +
+    '<div class="sub" style="margin-top:10px;font-size:12px;color:#8a8a86">' +
+    '以后想改，随时去右上角「⚙」里调。</div>', [
+    { t: '长一些，一千字上下', fn: function(){ setLen('long'); cb(); } },
+    { t: '中一些，八百字上下', fn: function(){ setLen('mid'); cb(); } },
+    { t: '短一些，六百字上下', fn: function(){ setLen('short'); cb(); } }
+  ], true);
+}
+
+/* ================= 自由行动 ================= */
 function buildPrompt(text){
-  var sys = '你是一部低魔中世纪领地经营小说的旁白。玩家是领主' + S.lord.name +
-    '，' + S.lord.age + ' 岁，' + ORIGINS[S.lord.origin].name + '出身，性情' +
-    NATURES[S.lord.nature].name + '。现在是第 ' + S.day + ' 天，地处' + ENV_NAME[S.env] +
-    '，人口 ' + S.pop + '，兵 ' + troopTotal() + '，金币 ' + Math.round(S.res.gold) +
-    '，粮 ' + Math.round(S.res.food) + '，民心 ' + Math.round(S.morale) +
-    '。用中文写 2 到 3 句，第二人称，语气克制，不写现代词汇，不替玩家做决定。';
+  var L = aiLen();
+  var sys = '你是一部低魔中世纪领地经营小说的旁白。' +
+    '玩家是领主' + S.lord.name + '，' + S.lord.age + ' 岁，' +
+    ORIGINS[S.lord.origin].name + '出身，性情' + NATURES[S.lord.nature].name + '。' +
+    '现在是第 ' + S.day + ' 天，地处' + ENV_NAME[S.env] + '，人口 ' + S.pop +
+    '，兵 ' + troopTotal() + '，粮 ' + Math.round(S.res.food) +
+    '，水 ' + Math.round(S.res.water) + '，金 ' + Math.round(S.res.gold) +
+    '，民心 ' + Math.round(S.morale) + '。' +
+    '写作要求：第二人称，语气克制，不写现代词汇，不出现具体年份。' +
+    '篇幅控制在 ' + L.min + ' 到 ' + L.max + ' 字之间。' +
+    '边界：只回应当前这一句，描写玩家这个举动带来的直接结果和周围人的反应；' +
+    '不替玩家做决定，不替玩家说话，不往下推进玩家没有提到的情节，不抢答，不跑题；' +
+    '不总结，不评论，不对玩家说教。';
   return [
     { role: 'system', content: sys },
     { role: 'user', content: text }
   ];
 }
-function freeAction(text){
-  say('你：' + text, 'think');
+function doFree(text){
   var key = dsKey();
   if(!key){
     setTimeout(function(){ say('四下无人应声。', 'sys'); }, 500);
     return;
   }
-  fetch('https://api.deepseek.com/chat/completions', {
+  var L = aiLen();
+  say('等着……', 'sys');
+  fetch(aiBase(), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + key
     },
     body: JSON.stringify({
-      model: 'deepseek-chat',
+      model: aiModel(),
       messages: buildPrompt(text),
       temperature: 0.9,
-      max_tokens: 220
+      max_tokens: L.tokens
     })
   }).then(function(r){ return r.json(); }).then(function(j){
+    var box = $('narrative');
+    var last = box.lastElementChild;
+    if(last && last.className === 'sys' && last.textContent === '等着……'){
+      box.removeChild(last);
+    }
     var t = j && j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
     if(t) say(String(t).trim());
     else say('……没有回应。', 'sys');
   }).catch(function(){
+    var box = $('narrative');
+    var last = box.lastElementChild;
+    if(last && last.className === 'sys' && last.textContent === '等着……'){
+      box.removeChild(last);
+    }
     say('……信号断了。', 'sys');
   });
+}
+function freeAction(text){
+  say('你：' + text, 'think');
+  if(!lenRaw()){
+    askLen(function(){ doFree(text); });
+  }else{
+    doFree(text);
+  }
 }
 function ensureActBar(){
   if($('actbar')) return;
@@ -2643,7 +2837,7 @@ function ensureActBar(){
   d.id = 'actbar';
   d.style.cssText = 'flex:0 0 auto;display:flex;gap:8px;padding:6px 10px;' +
     'background:var(--card);border-top:1px solid var(--line)';
-  d.innerHTML = '<input id="actin" maxlength="30" placeholder="说一句话，或者做点什么" ' +
+  d.innerHTML = '<input id="actin" placeholder="说一句话，或者做点什么" ' +
     'style="flex:1;min-width:0;font:inherit;font-size:13.5px;padding:8px 11px;border-radius:11px;' +
     'border:1px solid var(--line);background:var(--soft);color:var(--ink)" />' +
     '<button id="actgo" style="font:inherit;font-size:13px;padding:0 14px;border-radius:11px;' +
@@ -2697,43 +2891,52 @@ function bindSaveIO(){
   $('ioclose').onclick = function(){ $('saveio').classList.remove('on'); };
 }
 
-/* ================= 帮助 ================= */
+/* ===== 第 7 批到此结束，第 8 批接在这一行下面 ===== */
+
+/* ================= 攻略 ================= */
 function renderHelp(){
   var r = rule();
   var h = '';
   h += '<h3>每天在做什么</h3>';
   h += '<p>所有事都吃精力。建造一座 1 格，单座升级 1 格，全部升级 2 格，招一次兵 1 格，兵种晋升 1 格，锻造 1 格，侦查 1 格，出征 1 格。上限 3 格，神殿建成 4 格，天亮回满。</p>';
-  h += '<h3>粮是第一位的</h3>';
-  h += '<p>人每天吃 1，兵吃 2，英雄吃 5。粮见底就会走人，民心也掉。农田要有人住才种得开，房子不够，田再多也没用。</p>';
+
+  h += '<h3>粮和水</h3>';
+  h += '<p>人每天吃 1 份粮、喝半桶水；兵各两份；英雄各五份。粮见底会走人，水见底会多耗三成粮、再走掉半成人。水和粮一样要提前备。</p>';
+  h += '<p>水靠水井出，也可以在出征时从「河湾」「暗河」打回来，下雨也算。</p>';
+
   h += '<h3>地形</h3>';
   h += '<p>开局随机落在八种地形之一，每种都有一条增益和一条惩罚。当前是' + ENV_NAME[S.env] + '：' + r.good + '；' + r.bad + '。每七天换一次地方。</p>';
+
   h += '<h3>产出</h3>';
-  h += '<p>每座建筑都有主产和副产。伐木场出木材，副产兽皮；采石场出石料，副产矿石；铁矿洞出精铁，副产石料；煤矿洞出煤炭，副产石料。副产按座数折算。</p>';
+  h += '<p>每座建筑都有主产和副产。水井出水，伐木场出木材副产兽皮，采石场出石料副产矿石，铁矿洞出精铁副产石料，煤矿洞出煤炭副产石料。副产按座数折算。</p>';
+
   h += '<h3>建筑</h3>';
   h += '<p>每座单独算等级，最高 5 级。想省钱就一座座升，想快就全部一起升，材料按座数叠。</p>';
+
   h += '<h3>兵种</h3>';
   h += '<p>开局只能选一种兵。其余三种要靠开箱出的兵营图开营。兵分初级、中级、高级三档，打出来了经验才能晋升。</p>';
+
   h += '<h3>出征</h3>';
   h += '<p>先侦查，看清了才能打。一个地方最多打三次，掏空之后原地换一批新东西，重新变成问号。有英雄就能让他带队。越硬的地方，经验和战利品越多。</p>';
+
   h += '<h3>瞭望塔</h3>';
   h += '<p>建起来以后，侦查不再消耗精力，但次数照扣，也仍然要先侦查才能出征。</p>';
+
   h += '<h3>民心</h3>';
   h += '<p>民心 70 以上，出征攻击 +10%；30 以下，攻击 -10%。神殿、挡下夜袭、好事都会让民心涨。</p>';
+
   h += '<h3>夜袭</h3>';
   h += '<p>第 8 天起，每天晚上有一成多的概率有人摸过来。城墙防御加三成兵力防御，挡得住就没事，挡不住要丢木石粮和人。</p>';
+
   h += '<h3>路上遇见的事</h3>';
   h += '<p>每天结束时有三成半的概率出点事，屏幕中间会弹一个窗，给你三个选择。没有白拿的选项，每个都有代价。接了 AI 的话，这些事可能是它按你的处境现编的。</p>';
+
   h += '<h3>存档</h3>';
-  h += '<p>存在这台设备的浏览器里，包括叙事记录。换设备前，点下面的「存档码」复制走。</p>';
-  h += '<div class="card">';
-  h += '<div class="cfield" style="margin-bottom:4px"><label>AI 密钥</label>';
-  h += '<input id="keyin" type="text" value="' + esc(dsKey()) + '" placeholder="粘贴 DeepSeek 密钥" style="' + KEY_IN_STYLE + '" />';
-  h += '</div>';
-  h += '<div class="btns">';
-  h += '<button class="btn sm" id="keysave">保存密钥</button>';
-  h += '<button class="btn sm gray" id="keyclear">清除</button>';
-  h += '<button class="btn sm gray" id="opensave">存档码</button>';
-  h += '</div></div>';
+  h += '<p>存在这台设备的浏览器里，包括叙事记录。换设备前，去右上角「⚙」里点「存档码」复制走。</p>';
+
+  h += '<h3>AI 旁白</h3>';
+  h += '<p>底部输入框接的是外部大模型，密钥和长短都在「⚙」里设。不接也能玩，只是你说的话没人应。</p>';
+
   $('helpbody').innerHTML = h;
 }
 function bindHelp(){
@@ -2741,12 +2944,108 @@ function bindHelp(){
     renderHelp();
     $('helppage').classList.add('on');
     $('helppage').scrollTop = 0;
+  };
+  $('hclose').onclick = function(){ $('helppage').classList.remove('on'); };
+}
+
+/* ================= 设置 ================= */
+function renderSet(){
+  var cur = lenRaw();
+  var h = '';
+
+  h += '<h3>AI 旁白</h3>';
+  h += '<p>底部输入框接的是外部大模型。选一家，填密钥，点保存。</p>';
+
+  h += '<div class="card">';
+  h += '<div style="font-size:12.5px;color:var(--sub);margin-bottom:8px">点一个服务商，地址和模型自动填好。</div>';
+  h += '<div style="font-size:12.5px;color:#4a4a46;line-height:1.9;margin-bottom:4px">' +
+    '支持：' + AI_PROVIDERS.map(function(p){
+      return p.f ? '<span style="color:#c4483f">' + p.n + '</span>' : p.n;
+    }).join('　') + '。</div>';
+  h += '<div style="font-size:12px;color:#c4483f;line-height:1.7;margin-bottom:10px">' +
+    '红色是有免费额度的，日常玩基本花不到钱。Ollama 和 LM Studio 是装在自己电脑上的，手机用不了。</div>';
+  h += '<div class="opts" style="margin-bottom:10px">';
+  AI_PROVIDERS.forEach(function(p, i){
+    h += '<button class="opt" data-prov="' + i + '" style="font-size:12px;padding:7px 11px' +
+      (p.f ? ';color:#c4483f;border-color:#e8b5ae' : '') + '">' + p.n + '</button>';
+  });
+  h += '</div>';
+  h += '<div class="cfield" style="margin-bottom:6px"><label>密钥</label>';
+  h += '<input id="keyin" type="text" value="' + esc(dsKey()) + '" placeholder="sk- 开头的那串" style="' + KEY_IN_STYLE + '" />';
+  h += '</div>';
+  h += '<div class="cfield" style="margin-bottom:6px"><label>接口地址</label>';
+  h += '<input id="basein" type="text" value="' + esc(aiBase()) + '" style="' + KEY_IN_STYLE + '" />';
+  h += '</div>';
+  h += '<div class="cfield" style="margin-bottom:6px"><label>模型名</label>';
+  h += '<input id="modelin" type="text" value="' + esc(aiModel()) + '" style="' + KEY_IN_STYLE + '" />';
+  h += '</div>';
+
+  h += '<div class="cfield" style="margin-bottom:4px"><label>回复长短</label>';
+  h += '<div class="opts" id="lenopts">';
+  ['long', 'mid', 'short'].forEach(function(k){
+    var L = LEN_MAP[k];
+    var on = (cur || 'mid') === k;
+    h += '<button class="opt' + (on ? ' on' : '') + '" data-len="' + k + '">' +
+      L.name + '　约 ' + L.max + ' 字</button>';
+  });
+  h += '</div>';
+  h += '<div style="font-size:12px;color:var(--sub);margin-top:6px">' +
+    '越长越慢、越费额度。选过之后不再问，随时可以在这里改。</div>';
+  h += '</div>';
+
+  h += '<div class="btns">';
+  h += '<button class="btn sm" id="keysave">保存</button>';
+  h += '<button class="btn sm gray" id="keyclear">清除密钥</button>';
+  h += '</div></div>';
+
+  h += '<h3>存档</h3>';
+  h += '<div class="card">';
+  h += '<div class="sub">换设备前把存档码复制走，在新设备上粘回来。</div>';
+  h += '<div class="btns"><button class="btn gray" id="opensave">打开存档码</button></div>';
+  h += '</div>';
+
+  h += '<h3>重开</h3>';
+  h += '<div class="card">';
+  h += '<div class="sub">把现在的进度整个清掉，从创建角色开始。会随机一个新地形。</div>';
+  h += '<div class="btns"><button class="btn gray" id="restart">重开这座领地</button></div>';
+  h += '</div>';
+
+  $('setbody').innerHTML = h;
+}
+function bindSet(){
+  $('setbtn').onclick = function(){
+    renderSet();
+    $('setpage').classList.add('on');
+    $('setpage').scrollTop = 0;
+    var body = $('setbody');
+
+    body.querySelectorAll('[data-prov]').forEach(function(b){
+      b.onclick = function(){
+        var p = AI_PROVIDERS[parseInt(b.dataset.prov, 10)];
+        if(!p) return;
+        var e2 = $('basein'), e3 = $('modelin');
+        if(e2) e2.value = p.b;
+        if(e3) e3.value = p.m;
+        toast('已填入 ' + p.n + '，记得点保存');
+      };
+    });
+
+    body.querySelectorAll('[data-len]').forEach(function(b){
+      b.onclick = function(){
+        setLen(b.dataset.len);
+        body.querySelectorAll('[data-len]').forEach(function(x){
+          x.classList.toggle('on', x === b);
+        });
+        toast('记下了');
+      };
+    });
+
     var ks = $('keysave');
     if(ks) ks.onclick = function(){
-      var el = $('keyin');
-      var v = el ? el.value.trim() : '';
-      setKey(v);
-      toast(v ? '记下了' : '清空了');
+      var e1 = $('keyin'), e2 = $('basein'), e3 = $('modelin');
+      setKey(e1 ? e1.value.trim() : '');
+      setApi(e2 ? e2.value : '', e3 ? e3.value : '');
+      toast('记下了');
     };
     var kc = $('keyclear');
     if(kc) kc.onclick = function(){
@@ -2756,15 +3055,10 @@ function bindHelp(){
       toast('密钥已清除');
     };
     var os = $('opensave');
-    if(os) os.onclick = function(){ openSaveIO(); };
-    if(!$('restart')){
-      var d = document.createElement('div');
-      d.className = 'card';
-      d.innerHTML = '<h4>重开</h4>' +
-        '<div class="sub">把现在的进度整个清掉，从创建角色开始。会随机一个新地形。</div>' +
-        '<div class="btns"><button class="btn gray" id="restart">重开这座领地</button></div>';
-      $('helpbody').appendChild(d);
-    }
+    if(os) os.onclick = function(){
+      $('setpage').classList.remove('on');
+      openSaveIO();
+    };
     var rs = $('restart');
     if(rs) rs.onclick = function(){
       modal('重开会把现在的进度全部清掉，确定？', [
@@ -2779,24 +3073,24 @@ function bindHelp(){
       ]);
     };
   };
-  $('hclose').onclick = function(){ $('helppage').classList.remove('on'); };
+  $('setclose').onclick = function(){ $('setpage').classList.remove('on'); };
 }
 
-/* ===== 第 7 批到此结束，第 8 批接在这一行下面 ===== */
+/* ===== 第 8 批到此结束，第 9 批接在这一行下面 ===== */
 
 /* ================= 本地事件（上） ================= */
 var EVT = [
   { t: '过路的商队',
     d: '一支商队在篱笆外停下。领头的人掀开车帘，说可以拿粮换货，也可以借宿一晚。',
     o: [
-      { l: '用八十份粮换一批铁和煤', e: [['res','food',-80],['item','iron',2],['item','coal',2]] },
+      { l: '用八十份粮换铁和煤', e: [['res','food',-80],['item','iron',2],['item','coal',2]] },
       { l: '收留一宿，收六十金', e: [['res','gold',60],['morale',2]] },
       { l: '让他们绕道走', e: [['morale',-1]] }
     ] },
   { t: '逃荒的一家',
     d: '一家五口在门口站着，说从南边来，什么都能干，只求一口饭。',
     o: [
-      { l: '留下他们', e: [['pop',3],['res','food',-40],['morale',2]] },
+      { l: '留下他们', e: [['pop',3],['res','food',-40],['res','water',-20],['morale',2]] },
       { l: '给点粮打发走', e: [['res','food',-30],['morale',1]] },
       { l: '把门关上', e: [['morale',-3]] }
     ] },
@@ -2824,11 +3118,11 @@ var EVT = [
         } }
     ] },
   { t: '连夜的雨',
-    d: '雨下了整夜，几间屋子的顶开始漏。',
+    d: '雨下了整夜，几间屋子的顶开始漏，水缸倒是满了。',
     o: [
-      { l: '连夜修屋顶', e: [['res','wood',-50],['morale',3]] },
-      { l: '等雨停再说', e: [['pop',-2],['morale',-2]] },
-      { l: '把人挪到仓里挤一晚', e: [['res','food',-20],['morale',1]] }
+      { l: '连夜修屋顶', e: [['res','wood',-50],['res','water',80],['morale',3]] },
+      { l: '等雨停再说', e: [['pop',-2],['res','water',80],['morale',-2]] },
+      { l: '把人挪到仓里挤一晚', e: [['res','food',-20],['res','water',80],['morale',1]] }
     ] },
   { t: '野火',
     d: '西边的林子起火了，风往这边吹。',
@@ -2853,13 +3147,13 @@ var EVT = [
     d: '两个穿旧军服的人摸到门口，说北边打散了，想在你这儿落脚。',
     o: [
       { l: '收编', e: [['troop','militia',2],['morale',-1]] },
-      { l: '送他们去镇上换赏钱', e: [['res','gold',120],['morale',-3]] },
+      { l: '送他们去换赏钱', e: [['res','gold',120],['morale',-3]] },
       { l: '赶走', e: [['morale',-1]] }
     ] },
   { t: '门口的孩子',
     d: '早上开门，门槛上放着个裹在布里的孩子，人已经走了。',
     o: [
-      { l: '抱进去养', e: [['pop',1],['res','food',-30],['morale',3]] },
+      { l: '抱进去养', e: [['pop',1],['res','food',-30],['res','water',-15],['morale',3]] },
       { l: '送到邻村托人', e: [['res','gold',-40],['morale',2]] },
       { l: '放回原处', e: [['morale',-5]] }
     ] },
@@ -2867,7 +3161,7 @@ var EVT = [
     d: '一个背着工具袋的老人坐在井边歇脚，说自己打了一辈子铁，走到这儿走不动了。',
     o: [
       { l: '留下他', e: [['talent'],['res','food',-20]] },
-      { l: '给他点钱让他去镇上', e: [['res','gold',-60],['morale',2]] },
+      { l: '给点钱让他去镇上', e: [['res','gold',-60],['morale',2]] },
       { l: '没地方安置', e: [['morale',-1]] }
     ] },
   { t: '赌坊里出来的',
@@ -2903,11 +3197,11 @@ var EVT = [
       { l: '认了', e: [['res','food',-260],['morale',-6]] }
     ] },
   { t: '山塌了半边',
-    d: '后山塌下来，把去镇上的路埋了。',
+    d: '后山塌下来，把去镇上的路埋了，也把泉眼堵了。',
     o: [
-      { l: '出人出力清出来', e: [['res','stone',-60],['res','wood',-40],['morale',3]] },
+      { l: '出人出力清出来', e: [['res','stone',-60],['res','wood',-40],['res','water',60],['morale',3]] },
       { l: '绕远路', e: [['res','gold',-80],['morale',-1]] },
-      { l: '先不管', e: [['morale',-4],['res','food',-50]] }
+      { l: '先不管', e: [['morale',-4],['res','food',-50],['res','water',-40]] }
     ] },
   { t: '狼群下山',
     d: '夜里狼嚎得厉害，羊圈被掏了。',
@@ -2920,7 +3214,7 @@ var EVT = [
     d: '一个背着包袱的人在林子里转了三天，看见炊烟才走过来。',
     o: [
       { l: '收下他', e: [['pop',1],['res','food',-20],['morale',1]] },
-      { l: '给包干粮指条路', e: [['item','grain',-1],['morale',2]] },
+      { l: '给包干粮指条路', e: [['item','grain',-1],['res','water',-10],['morale',2]] },
       { l: '这人来路不明', e: [['morale',-2]] }
     ] },
   { t: '游方的僧人',
@@ -2928,7 +3222,7 @@ var EVT = [
     o: [
       { l: '布施些钱粮', e: [['res','gold',-50],['res','food',-30],['morale',6]] },
       { l: '请他讲一段', e: [['morale',4]] },
-      { l: '给碗水就让他走', e: [['morale',-1]] }
+      { l: '给碗水就让他走', e: [['res','water',-10],['morale',-1]] }
     ] },
   { t: '收税的人来了',
     d: '两个骑马的带着账本，说你这片地该缴今年的税。',
@@ -2961,9 +3255,9 @@ var EVT = [
       { l: '扣下他的货', e: [['morale',-6],['item','iron',3],['item','coal',3]] }
     ] },
   { t: '石缝里透出亮',
-    d: '采石的人回来说，山壁上露了一条新矿脉。',
+    d: '采石的人回来说，山壁上露了一条新矿脉，边上还有渗水。',
     o: [
-      { l: '立刻组织开挖', e: [['res','wood',-60],['item','ore',3],['item','iron',2],['morale',3]] },
+      { l: '立刻组织开挖', e: [['res','wood',-60],['item','ore',3],['item','iron',2],['res','water',40],['morale',3]] },
       { l: '先记下来，慢慢来', e: [['item','ore',1]] },
       { l: '不值得折腾', e: [] }
     ] },
@@ -2998,7 +3292,7 @@ var EVT = [
           S.morale = clamp(S.morale + 8, 0, 100);
           say('人赶跑了。折了 ' + l + ' 个。邻村抬了两百金和一堆谢礼来。', 'good');
         } },
-      { l: '借他们些粮', e: [['res','food',-80],['morale',3]] },
+      { l: '借他们些粮和水', e: [['res','food',-80],['res','water',-60],['morale',3]] },
       { l: '关起门来', e: [['morale',-5]] }
     ] },
   { t: '路边倒着一匹马',
@@ -3015,9 +3309,9 @@ EVT = EVT.concat([
   { t: '井水发苦',
     d: '打了十几年的井，这几天打上来的水带回一股腥苦味。',
     o: [
-      { l: '另挖一口', e: [['res','wood',-60],['res','stone',-40],['morale',2]] },
+      { l: '另挖一口', e: [['res','wood',-60],['res','stone',-40],['res','water',30],['morale',2]] },
       { l: '烧开了再喝', e: [['res','wood',-30],['pop',-1]] },
-      { l: '将就着用', e: [['pop',-3],['morale',-4]] }
+      { l: '将就着用', e: [['pop',-3],['res','water',-30],['morale',-4]] }
     ] },
   { t: '老树倒了',
     d: '营边那棵老树在一夜风里倒了，横在地上挡着路。',
@@ -3057,7 +3351,7 @@ EVT = EVT.concat([
   { t: '雪夜的敲门声',
     d: '半夜有人拍门，说车陷在路上，求借宿。',
     o: [
-      { l: '开门收留', e: [['pop',1],['res','food',-25],['morale',3]] },
+      { l: '开门收留', e: [['pop',1],['res','food',-25],['res','water',-15],['morale',3]] },
       { l: '给盏灯指路', e: [['res','wood',-10],['morale',1]] },
       { l: '装没听见', e: [['morale',-3]] }
     ] },
@@ -3068,19 +3362,32 @@ EVT = EVT.concat([
       { l: '分点吃的打发', e: [['res','food',-30],['morale',3]] },
       { l: '都赶走', e: [['morale',-2]] }
     ] },
-  { t: '石头上的刻字',
-    d: '有人在石头上发现一行刻字，看不太懂，像是一个人名。',
+  { t: '几个月没下雨',
+    d: '河沟见底，井里的水一天比一天浑，打上来半桶泥。',
     o: [
-      { l: '找人拓下来', e: [['res','gold',-30],['morale',2]] },
-      { l: '就这么放着', e: [] },
-      { l: '磨掉', e: [['morale',-1]] }
+      { l: '带人把井再挖深',
+        fn: function(){
+          S.res.wood = Math.max(0, S.res.wood - 50);
+          S.res.stone = Math.max(0, S.res.stone - 70);
+          if(bCount('well') > 0){
+            S.res.water += 120;
+            S.morale = clamp(S.morale + 5, 0, 100);
+            say('井挖深了两丈，水又清了。', 'good');
+          }else{
+            S.res.water += 40;
+            S.pop = Math.max(1, S.pop - 2);
+            say('没有像样的井，只能在河沟边挖个坑。走了两口人。', 'warn');
+          }
+        } },
+      { l: '按人头分水', e: [['pop',-3],['morale',-2]] },
+      { l: '去远处挑水', e: [['res','food',-40],['res','water',60],['morale',1]] }
     ] },
   { t: '铁匠铺走了水',
     d: '半夜火星溅到草堆上，铁匠铺屋顶烧穿了一角。',
     o: [
-      { l: '立刻抢修', e: [['res','wood',-70],['res','stone',-30]] },
+      { l: '立刻抢修', e: [['res','wood',-70],['res','stone',-30],['res','water',-40]] },
       { l: '停几天再说', e: [['item','iron',-3],['morale',-2]] },
-      { l: '先保命，铺子算什么', e: [['res','wood',-40],['morale',2]] }
+      { l: '先保命，铺子算什么', e: [['res','wood',-40],['res','water',-30],['morale',2]] }
     ] },
   { t: '拾荒的老人',
     d: '一个背着麻袋的老人在营外的堆里翻东西，被巡哨揪住了。',
@@ -3183,7 +3490,7 @@ EVT = EVT.concat([
   { t: '空营',
     d: '巡哨的回来报，西边山谷里有个营地，火还没灭，人不见了。',
     o: [
-      { l: '带人去搜', e: [['res','gold',80],['item','iron',2],['troop','militia',-1]] },
+      { l: '带人去搜', e: [['res','gold',80],['item','iron',2],['res','water',50],['troop','militia',-1]] },
       { l: '远远看着', e: [['morale',-1]] },
       { l: '绕开走', e: [] }
     ] }
@@ -3192,7 +3499,7 @@ EVT = EVT.concat([
 var EVT_MOOD = [
   0, 1, 0, -1, -1, -1, -1, 1, 0, 1, 0, 1, -1, -1, -1, 0, 1, -1, 0, 1,
   -1, 1, 1, 0, 0,
-  -1, 0, 1, 0, -1, -1, 0, 1, 0, -1, 1, 0, 0, 1, 0,
+  -1, 0, 1, 0, -1, -1, 0, 1, -1, -1, 1, 0, 0, 1, 0,
   -1, 1, 1, 1, -1, -1, 1, 0, 0, 0
 ];
 
@@ -3200,14 +3507,17 @@ var EVT_MOOD = [
 function runEff(list){
   var out = [];
   (list || []).forEach(function(e){
+    if(!Array.isArray(e)) return;
     var k = e[0];
     if(k === 'res'){
       var key = e[1], n = e[2];
+      if(!RES_NAME[key] || typeof n !== 'number') return;
       if(S.res[key] + n < 0) n = -S.res[key];
       S.res[key] = Math.max(0, S.res[key] + n);
       if(n) out.push(RES_NAME[key] + (n > 0 ? ' +' + n : ' ' + n));
     }else if(k === 'item'){
       var id = e[1], n2 = e[2];
+      if(!ITEMS[id] || typeof n2 !== 'number') return;
       if(n2 > 0){
         addItem(id, n2);
         out.push(ITEMS[id].name + ' +' + n2);
@@ -3273,16 +3583,16 @@ function aiEvent(cb){
     '格式：{"t":"标题（4到8个字）","d":"事件描述（40到70字，第二人称，语气克制）",' +
     '"o":[{"l":"选项（不超过14字）","e":[["res","gold",50]]}, {}, {}]}。' +
     '三个选项必须有取舍，不能全是好处。' +
-    '可用效果：["res","gold"/"wood"/"stone"/"food",整数]；' +
+    '可用效果：["res","gold"/"wood"/"stone"/"food"/"water",整数]；' +
     '["item","iron"/"coal"/"ore"/"hide"/"gem"/"potion"/"grain"/"scroll"/"tea"/"sword"/"bow"/"armor"/"charm",整数]；' +
     '["pop",整数]；["morale",整数]；["energy",整数]；["talent"]；["hero"]；["heal"]。' +
     '数值范围：资源 -250 到 250，物品 -3 到 3，人口 -4 到 4，民心 -8 到 8。' +
     '不写现代词汇，不出现具体年份。';
   var usr = '当前局势：第 ' + S.day + ' 天，' + ENV_NAME[S.env] + '，人口 ' + S.pop +
     '，兵 ' + troopTotal() + '，金币 ' + Math.round(S.res.gold) +
-    '，粮 ' + Math.round(S.res.food) + '，木 ' + Math.round(S.res.wood) +
-    '，石 ' + Math.round(S.res.stone) + '，民心 ' + Math.round(S.morale) +
-    '。生成一个贴合这个局势的事件。';
+    '，粮 ' + Math.round(S.res.food) + '，水 ' + Math.round(S.res.water) +
+    '，木 ' + Math.round(S.res.wood) + '，石 ' + Math.round(S.res.stone) +
+    '，民心 ' + Math.round(S.morale) + '。生成一个贴合这个局势的事件。';
   var ctrl = null;
   try{ ctrl = new AbortController(); }catch(e){ ctrl = null; }
   var t = setTimeout(function(){ if(ctrl) ctrl.abort(); }, 9000);
@@ -3290,14 +3600,14 @@ function aiEvent(cb){
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
     body: JSON.stringify({
-      model: 'deepseek-chat',
+      model: aiModel(),
       messages: [{ role: 'system', content: sys }, { role: 'user', content: usr }],
       temperature: 1,
-      max_tokens: 400
+      max_tokens: 500
     })
   };
   if(ctrl) opt.signal = ctrl.signal;
-  fetch('https://api.deepseek.com/chat/completions', opt)
+  fetch(aiBase(), opt)
     .then(function(r){ return r.json(); })
     .then(function(j){
       clearTimeout(t);
@@ -3318,11 +3628,10 @@ function showEv(ev){
   var opts = ev.o || ev.opts || [];
   var html = '<div class="mtag">第 ' + S.day + ' 天　' + ENV_NAME[S.env] + '</div>' +
     '<div class="mtitle">' + esc(title) + '</div>' +
-    '<div style="font-size:13.5px;color:#4a4a46;line-height:1.7">' + esc(desc) + '</div>';
+    '<div class="mdesc">' + esc(desc) + '</div>';
   var btns = opts.map(function(o){
     return {
       t: o.l || o.label || '……',
-      gray: true,
       fn: function(){
         say('【' + title + '】', 'day');
         say(o.l || o.label || '');
@@ -3333,6 +3642,12 @@ function showEv(ev){
       }
     };
   });
+  if(!btns.length){
+    btns = [{
+      t: '知道了',
+      fn: function(){ say('没发生什么。', 'sys'); }
+    }];
+  }
   modal(html, btns, true);
 }
 function maybeEvent(){
@@ -3349,7 +3664,7 @@ function maybeEvent(){
   }
 }
 
-/* ===== 第 9 批到此结束，第 10 批接在这一行下面 ===== */
+/* ===== 第 10 批到此结束，第 11 批接在这一行下面 ===== */
 
 /* ================= 人物创建 ================= */
 function showCreate(){
@@ -3637,12 +3952,14 @@ function bindGlobal(){
   $('sclose').onclick = closeSheet;
   $('mask').onclick = function(e){ if(e.target === $('mask')) closeModal(); };
   $('wclose').onclick = function(){ $('world').classList.remove('on'); };
+  $('ioclose').onclick = function(){ $('saveio').classList.remove('on'); };
   $('tagch').onclick = function(){ if(S) openWorld('ch'); };
   $('tagmk').onclick = function(){ if(S) openWorld('mk'); };
   $('bgmbtn').onclick = function(){ AUDIO.toggle(); };
   AUDIO.bind($('bgmbtn'));
   bindTabs();
   bindHelp();
+  bindSet();
   bindSaveIO();
   bindCreate();
 }
@@ -3673,22 +3990,28 @@ function startGame(){
     sayDay();
     say('你站在' + ENV_NAME[S.env] + '边上，身后是跟过来的 ' + S.pop + ' 口人。');
     say('木料 ' + fmt(S.res.wood) + '，石料 ' + fmt(S.res.stone) +
-      '，粮食 ' + fmt(S.res.food) + '，金币 ' + fmt(S.res.gold) + '。就这些。');
+      '，粮食 ' + fmt(S.res.food) + '，水 ' + fmt(S.res.water) +
+      '，金币 ' + fmt(S.res.gold) + '。就这些。');
     say('跟着你来的还有 ' + S.troops[tk].n + ' 个' + TROOP[tk].name +
       '，是他们先站住的脚。', 'sys');
     say('此地' + rule().good + '；' + rule().bad + '。', 'sys');
+    say('水缸里还有 ' + fmt(S.res.water) + ' 桶水。一口井都没有，先去打口井，不然撑不了几天。', 'warn');
     save();
   }else{
     NO_LOG = true;
     if(S.log.length) say('— 回到这里 —', 'split');
     sayDay();
     say('你回到帐前。' + ENV_NAME[S.env] + '的风还没停。');
-    say('粮 ' + fmt(S.res.food) + '，木 ' + fmt(S.res.wood) +
-      '，石 ' + fmt(S.res.stone) + '，金 ' + fmt(S.res.gold) + '。', 'sys');
+    say('粮 ' + fmt(S.res.food) + '，水 ' + fmt(S.res.water) +
+      '，木 ' + fmt(S.res.wood) + '，石 ' + fmt(S.res.stone) +
+      '，金 ' + fmt(S.res.gold) + '。', 'sys');
     say('兵 ' + troopTotal() + ' 人，精力 ' + S.energy.cur + ' / ' + S.energy.max +
       '，民心 ' + Math.round(S.morale) + '。', 'sys');
     if(S.res.food < foodNeed() * 2){
       say('仓里的粮撑不了几天了，得赶紧开田或者出门打一趟。', 'warn');
+    }
+    if(S.res.water < waterNeed() * 2){
+      say('水缸快见底了，一口井都没有的话，得先建一口。', 'warn');
     }
     if(S.energy.cur <= 0){
       say('今天已经动不了了，回帐里歇着吧。', 'warn');
