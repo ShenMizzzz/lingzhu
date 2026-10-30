@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>领主降临</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;background:var(--bg1);color:var(--text);transition:background .5s}
+
+body[data-env="forest"]{--bg1:#eaf6ee;--bg2:#dff0e5;--panel:#f7fcf9;--card:#ffffff;--field:#e6f3ea;--line:#cbe5d4;--line2:#aad4b9;--accent:#2f9e5e;--accent-d:#257e4a;--amber:#c98a1f;--red:#c4483f;--text:#14291d;--sub:#4d6b59;--dim:#8aa596}
+body[data-env="plain"]{--bg1:#f4f8e4;--bg2:#eaf2d5;--panel:#fbfdf5;--card:#ffffff;--field:#eef4dc;--line:#dbe7bf;--line2:#c3d69c;--accent:#6b8f22;--accent-d:#567419;--amber:#c58c1c;--red:#bf4a40;--text:#222b12;--sub:#5f6b47;--dim:#98a486}
+body[data-env="desert"]{--bg1:#fdf3e4;--bg2:#f7e8d2;--panel:#fffaf2;--card:#ffffff;--field:#f9ecda;--line:#efd8bb;--line2:#e0c096;--accent:#d1791f;--accent-d:#a95f14;--amber:#c98a1f;--red:#c1483d;--text:#33220f;--sub:#7a6044;--dim:#b09a80}
+body[data-env="snow"]{--bg1:#eef6fd;--bg2:#e2eefa;--panel:#f9fcff;--card:#ffffff;--field:#e9f2fb;--line:#d0e2f2;--line2:#b0cbe4;--accent:#3b8fd4;--accent-d:#2b6fa8;--amber:#c08a24;--red:#bd4a42;--text:#122436;--sub:#506b84;--dim:#8ba2b8}
+body[data-env="swamp"]{--bg1:#e8f4ec;--bg2:#dcefe2;--panel:#f6fcf8;--card:#ffffff;--field:#e4f2e9;--line:#c8e3d3;--line2:#a6cdb8;--accent:#3f9b72;--accent-d:#317b5a;--amber:#c08a24;--red:#bd4a42;--text:#12291f;--sub:#4e6b5b;--dim:#87a494}
+body[data-env="grass"]{--bg1:#f2f8e0;--bg2:#e8f2cf;--panel:#fbfdf4;--card:#ffffff;--field:#edf5d9;--line:#d8e7b9;--line2:#c0d596;--accent:#74961f;--accent-d:#5c7a17;--amber:#c08a24;--red:#bd4a42;--text:#202a10;--sub:#5d6a42;--dim:#97a482}
+body[data-env="hill"]{--bg1:#f7f1e8;--bg2:#efe6d9;--panel:#fdfaf6;--card:#ffffff;--field:#f2ebe0;--line:#e3d6c4;--line2:#cdba9f;--accent:#96703f;--accent-d:#7a5a31;--amber:#c08a24;--red:#bd4a42;--text:#2a2118;--sub:#6d5d4c;--dim:#a3947f}
+body[data-env="island"]{--bg1:#e4f5f8;--bg2:#d6eef3;--panel:#f5fdff;--card:#ffffff;--field:#e0f2f6;--line:#c1e2e8;--line2:#9fcfd8;--accent:#1f9fb0;--accent-d:#177e8c;--amber:#c08a24;--red:#bd4a42;--text:#0f2b31;--sub:#4a6c74;--dim:#82a4ac}
+
+#app{position:fixed;inset:0;height:var(--vh,100vh);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+#top{padding:calc(env(safe-area-inset-top) + 8px) 12px 8px;background:var(--panel);border-bottom:1px solid var(--line);flex-shrink:0}
+#toprow{position:relative;display:flex;align-items:center;justify-content:space-between;gap:6px;height:38px}
+.tleft,.tright{display:flex;align-items:center;gap:6px;z-index:2}
+#title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:16px;font-weight:700;letter-spacing:.12em;white-space:nowrap;pointer-events:none;background:linear-gradient(100deg,var(--accent),var(--amber),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.wtag{height:34px;padding:0 11px;font-size:13px;font-family:inherit;background:var(--field);border:1px solid var(--line2);border-radius:10px;color:var(--accent-d);font-weight:500}
+.wtag:active{background:var(--accent);border-color:var(--accent);color:#fff}
+.wtag.lock{opacity:.45}
+.tbtn{width:34px;height:34px;flex-shrink:0;font-size:15px;line-height:1;background:var(--field);border:1px solid var(--line2);border-radius:10px;color:var(--text);font-family:inherit}
+.tbtn:active,.tbtn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+#bar{display:flex;justify-content:space-between;gap:10px;padding:8px 16px;font-size:12px;color:var(--sub);background:var(--bg2);border-bottom:1px solid var(--line);flex-shrink:0}
+#bar span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#narrative{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:16px 18px 22px;font-size:14.5px;line-height:1.8}
+#narrative p{margin-bottom:12px}
+#narrative strong{color:var(--accent-d);font-weight:700}
+.n-days{margin:18px 0 14px;text-align:center;font-size:12px;color:var(--dim);letter-spacing:.24em}
+.n-sys{color:var(--accent-d);font-size:13.5px}
+.n-bad{color:var(--red);font-size:13.5px}
+#tabbar{display:flex;gap:6px;padding:8px 10px;background:var(--panel);border-top:1px solid var(--line);padding-bottom:calc(8px + env(safe-area-inset-bottom)*.4);flex-shrink:0;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#tabbar::-webkit-scrollbar{display:none}
+#tabbar button{flex:0 0 auto;min-width:70px;padding:11px 16px;font-size:13px;font-family:inherit;background:var(--field);border:1px solid var(--line2);border-radius:10px;color:var(--accent-d);white-space:nowrap}
+#tabbar button:active{background:var(--accent);color:#fff;border-color:var(--accent)}
+#inputbar{display:flex;gap:8px;padding:9px 10px;padding-bottom:calc(9px + env(safe-area-inset-bottom));background:var(--panel);border-top:1px solid var(--line);flex-shrink:0}
+#input{flex:1;min-width:0;padding:12px 14px;font-family:inherit;background:var(--field);border:1px solid var(--line2);border-radius:10px;color:var(--text);font-size:14px;outline:none}
+#input::placeholder{color:var(--dim)}
+#input:focus{border-color:var(--accent);background:var(--card)}
+#send{padding:12px 20px;background:var(--accent);border:0;border-radius:10px;color:#fff;font-size:14px;font-weight:600;font-family:inherit;flex-shrink:0}
+#send:active{background:var(--accent-d)}
+#scrim{position:absolute;inset:0;background:rgba(20,40,30,.28);opacity:0;pointer-events:none;transition:opacity .22s;z-index:90}
+#scrim.on{opacity:1;pointer-events:auto}
+#sheet{position:absolute;left:0;right:0;bottom:0;z-index:100;height:74vh;max-height:74vh;background:var(--panel);border-top:1px solid var(--line2);border-radius:18px 18px 0 0;transform:translateY(102%);transition:transform .26s cubic-bezier(.32,.72,0,1);display:flex;flex-direction:column;min-height:0;box-shadow:0 -8px 30px rgba(30,60,45,.14)}
+#sheet.on{transform:translateY(0)}
+#shead{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;flex-shrink:0}
+#stitle{font-size:15px;font-weight:700;letter-spacing:.08em}
+#sclose{width:30px;height:30px;background:var(--field);border:1px solid var(--line2);border-radius:50%;color:var(--sub);font-size:14px;font-family:inherit}
+#sbody{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:0 16px 30px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px;box-shadow:0 1px 2px rgba(30,60,45,.04)}
+.card h4{font-size:14.5px;font-weight:700;margin-bottom:9px}
+.row{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;color:var(--sub);padding:5px 0}
+.row b{color:var(--text);font-weight:600}
+.grow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn{flex:1;min-width:calc(50% - 4px);padding:12px 8px;font-size:13.5px;font-family:inherit;background:var(--field);border:1px solid var(--line2);border-radius:10px;color:var(--text)}
+.btn:active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.btn:disabled{opacity:.4}
+.tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;background:var(--field);color:var(--sub);border:1px solid var(--line2);margin-left:6px}
+.tag.ok{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tag.no{background:transparent;color:var(--red);border-color:var(--red)}
+#mask{position:absolute;inset:0;z-index:150;background:rgba(20,40,30,.42);display:none;align-items:center;justify-content:center;padding:26px}
+#mask.on{display:flex}
+#mbox{width:100%;max-width:340px;max-height:70vh;overflow-y:auto;background:var(--panel);border:1px solid var(--line2);border-radius:16px;padding:22px 20px}
+#mbox h3{font-size:16px;margin-bottom:12px;font-weight:700}
+#mtext{font-size:13.5px;line-height:1.75;color:var(--sub);margin-bottom:18px}
+#mtext b{color:var(--text)}
+#mbtns{display:flex;gap:9px}
+#mbtns button{flex:1;padding:12px;font-size:14px;border-radius:10px;border:1px solid var(--line2);background:var(--field);color:var(--text);font-family:inherit}
+#mbtns button.ok{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+#world,#helppage,#create{position:absolute;inset:0;background:var(--bg1);display:none;flex-direction:column;min-height:0}
+#world{z-index:200}
+#helppage{z-index:210}
+#create{z-index:230}
+#world.on,#helppage.on,#create.on{display:flex}
+.whead{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 14px) 16px 13px;border-bottom:1px solid var(--line);flex-shrink:0;background:var(--panel)}
+.whead span{font-size:16px;font-weight:700;letter-spacing:.16em}
+#wclose,#hclose{width:32px;height:32px;background:var(--field);border:1px solid var(--line2);border-radius:10px;color:var(--sub);font-size:15px;font-family:inherit}
+.wbody,.helpbody,.crscroll{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.wbody{padding:14px 16px 30px}
+.wmsg{margin-bottom:15px;line-height:1.65;font-size:13.5px}
+.wmsg i{color:var(--dim);font-style:normal;font-size:11.5px;margin-right:7px}
+.wmsg b{color:var(--accent-d)}
+.wlock{padding:70px 20px;text-align:center;color:var(--sub);font-size:14.5px;line-height:2}
+.wlock em{display:block;color:var(--accent);font-style:normal;font-size:24px;margin-top:12px;font-weight:700}
+.wempty{padding:50px;text-align:center;color:var(--dim);font-size:13.5px}
+.wlot{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 15px;margin-bottom:10px}
+.wlot .r{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.wlot .n{font-size:14.5px;font-weight:600}
+.wlot .p{color:var(--amber);font-size:13.5px;white-space:nowrap;font-weight:700}
+.wlot .s{color:var(--dim);font-size:12px;margin-top:7px}
+.wbuy{margin-top:10px;width:100%;padding:11px;border:1px solid var(--line2);background:var(--field);color:var(--accent-d);border-radius:9px;font-size:13.5px;font-family:inherit;font-weight:600}
+.helpbody{padding:16px 18px 44px;font-size:13.5px;line-height:1.9;color:var(--sub)}
+.helpbody h3{color:var(--text);font-size:15px;margin:22px 0 9px;font-weight:700;padding-left:9px;border-left:3px solid var(--accent)}
+.helpbody h3:first-child{margin-top:0}
+.helpbody p{margin-bottom:9px}
+.helpbody b{color:var(--accent-d)}
+#saveio{position:absolute;inset:0;z-index:220;background:rgba(20,40,30,.55);display:none;flex-direction:column;gap:10px;padding:18px;padding-top:calc(env(safe-area-inset-top) + 18px)}
+#saveio.on{display:flex}
+#saveio .tip{color:#fff;font-size:13px;flex-shrink:0;line-height:1.65}
+#saveio textarea{flex:1;min-height:0;width:100%;resize:none;background:var(--panel);color:var(--text);border:1px solid var(--line2);border-radius:12px;padding:12px;font-size:11.5px;font-family:monospace;outline:none}
+#saveio .sbtns{display:flex;gap:9px;flex-shrink:0}
+#saveio .sbtns button{flex:1;padding:13px;border:0;border-radius:10px;font-size:14px;font-family:inherit;background:var(--panel);color:var(--text);font-weight:600}
+#saveio .sbtns button.pri{background:var(--accent);color:#fff}
+#saveio .sbtns button.ok{background:var(--accent-d);color:#fff}
+.crhd{padding:calc(env(safe-area-inset-top) + 24px) 20px 14px;text-align:center;flex-shrink:0}
+.crhd h1{font-size:20px;letter-spacing:.34em;font-weight:700;padding-left:.34em}
+.crhd p{font-size:12.5px;color:var(--sub);margin-top:9px;line-height:1.7}
+.crscroll{padding:0 18px 26px}
+.crflag{width:112px;height:72px;border-radius:11px;margin:0 auto 20px;border:2px solid var(--line2)}
+.crlabel{font-size:12.5px;color:var(--sub);margin:20px 0 9px;letter-spacing:.12em}
+.crlabel:first-child{margin-top:0}
+.crinput{width:100%;padding:13px 15px;border-radius:10px;border:1px solid var(--line2);background:var(--card);color:var(--text);font-size:15px;font-family:inherit;outline:none}
+.crrow{display:flex;gap:8px}
+.crrow button{flex:1;padding:12px;border-radius:10px;border:1px solid var(--line2);background:var(--card);color:var(--sub);font-size:14px;font-family:inherit}
+.crrow button.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.crgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.crgrid .opt{padding:13px;border-radius:11px;border:1px solid var(--line2);background:var(--card);text-align:left;font-family:inherit}
+.crgrid .opt.on{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
+.crgrid .opt b{display:block;font-size:14px;margin-bottom:4px;font-weight:700}
+.crgrid .opt span{font-size:11.5px;color:var(--sub);line-height:1.5;display:block}
+.crgrid .opt em{font-style:normal;font-size:11.5px;color:var(--accent-d);display:block;margin-top:6px;font-weight:600}
+.swatches{display:flex;gap:9px;flex-wrap:wrap}
+.sw{width:34px;height:34px;border-radius:50%;border:2px solid transparent}
+.sw.on{border-color:var(--text);transform:scale(1.06)}
+.crfoot{flex-shrink:0;padding:12px 18px calc(12px + env(safe-area-inset-bottom));background:var(--panel);border-top:1px solid var(--line)}
+.crgo{width:100%;padding:16px;border:0;border-radius:12px;background:var(--accent);color:#fff;font-size:16px;font-weight:700;font-family:inherit;letter-spacing:.24em}
+</style>
+</head>
+<body data-env="forest">
+
+<div id="app">
+
+  <header id="top">
+    <div id="toprow">
+      <div class="tleft">
+        <button class="wtag" id="tagch">频道</button>
+        <button class="wtag" id="tagmk">交易</button>
+      </div>
+      <div id="title">领主降临</div>
+      <div class="tright">
+        <button class="tbtn" id="bgmbtn">♪</button>
+        <button class="tbtn" id="helpbtn">?</button>
+      </div>
+    </div>
+  </header>
+
+  <div id="bar">
+    <span id="barDay">第 1 天</span>
+    <span id="barEnv">森林</span>
+    <span id="barPop">50 人</span>
+  </div>
+
+  <main id="narrative"></main>
+
+  <nav id="tabbar">
+    <button data-tab="attr">属性</button>
+    <button data-tab="land">领地</button>
+    <button data-tab="build">建造</button>
+    <button data-tab="hero">英雄</button>
+    <button data-tab="store">仓库</button>
+    <button data-tab="act">行动</button>
+  </nav>
+
+  <div id="inputbar">
+    <input id="input" type="text" placeholder="自由行动，或向顾问提问…" autocomplete="off">
+    <button id="send">行动</button>
+  </div>
+
+  <div id="scrim"></div>
+
+  <div id="sheet">
+    <div id="shead">
+      <div id="stitle">属性</div>
+      <button id="sclose">✕</button>
+    </div>
+    <div id="sbody"></div>
+  </div>
+
+  <div id="mask"><div id="mbox"></div></div>
+
+  <div id="world">
+    <div class="whead">
+      <span id="wtitle">世 界 频 道</span>
+      <button id="wclose">✕</button>
+    </div>
+    <div class="wbody" id="wch"></div>
+    <div class="wbody" id="wmk" style="display:none"></div>
+  </div>
+
+  <div id="helppage">
+    <div class="whead">
+      <span>游 戏 攻 略</span>
+      <button id="hclose">✕</button>
+    </div>
+    <div class="helpbody" id="helpbody"></div>
+  </div>
+
+  <div id="saveio">
+    <div class="tip">存档码。换设备前复制走，粘回来就能接上。</div>
+    <textarea id="iotext" spellcheck="false"></textarea>
+    <div class="sbtns">
+      <button class="pri" id="iocopy">复制</button>
+      <button class="ok" id="ioload">导入并刷新</button>
+      <button id="ioclose">关闭</button>
+    </div>
+  </div>
+
+  <div id="create">
+    <div class="crhd">
+      <h1>领主降临</h1>
+      <p>在踏上这片土地之前<br>先想清楚，你是谁</p>
+    </div>
+    <div class="crscroll">
+      <div class="crflag" id="crflag"></div>
+      <div class="crlabel">姓名</div>
+      <input class="crinput" id="crname" maxlength="12" placeholder="请输入领主姓名" autocomplete="off">
+      <div class="crlabel">性别</div>
+      <div class="crrow" id="crgender">
+        <button data-g="male" class="on">男</button>
+        <button data-g="female">女</button>
+      </div>
+      <div class="crlabel">年龄　<span id="crageshow" style="color:var(--accent-d);font-weight:700">24 岁</span></div>
+      <input class="crinput" id="crage" type="range" min="10" max="70" value="24" style="padding:0;background:transparent;border:0">
+      <div class="crlabel">出身</div>
+      <div class="crgrid" id="crorigin"></div>
+      <div class="crlabel">性情</div>
+      <div class="crgrid" id="crnature"></div>
+      <div class="crlabel">旗帜主色</div>
+      <div class="swatches" id="crcolorA"></div>
+      <div class="crlabel">旗帜副色</div>
+      <div class="swatches" id="crcolorB"></div>
+    </div>
+    <div class="crfoot">
+      <button class="crgo" id="crgo">就 此 落 幕</button>
+    </div>
+  </div>
+
+</div> <script>
+var S = null, busy = false, CR = null;
+var SAVE_KEY = 'lingzhu_save', OLD_KEY = 'lingzhu_save_v9', SCHEMA = 12;
+
+function $(id){ return document.getElementById(id); }
+function $$(sel){ return document.querySelectorAll(sel); }
+
+var ENV_NAME = {forest:'森林',plain:'平原',desert:'沙漠',snow:'雪山',swamp:'沼泽',grass:'草原',hill:'丘陵',island:'海岛'};
+var ENV_FACTOR = {
+  forest:{food:1,wood:1.5,stone:0.8}, plain:{food:1.3,wood:0.9,stone:0.9},
+  desert:{food:0.6,wood:0.7,stone:1.2}, snow:{food:0.7,wood:0.7,stone:1.3},
+  swamp:{food:0.8,wood:1.1,stone:1}, grass:{food:1.2,wood:0.8,stone:0.9},
+  hill:{food:0.8,wood:0.9,stone:1.4}, island:{food:0.7,wood:1,stone:1.1}
+};
+var BUILD = {
+  house:{name:'房屋',wood:100,stone:50,desc:'每栋住两户农户'},
+  farm:{name:'农田',wood:50,stone:0,desc:'每亩日产 10 份粮，需农户耕作'},
+  lumber:{name:'伐木场',wood:80,stone:20,desc:'日产 20 木材'},
+  quarry:{name:'采石场',wood:60,stone:40,desc:'日产 15 石料'},
+  barracks:{name:'兵营',wood:150,stone:100,desc:'可招募士兵，小概率出英雄'},
+  wall:{name:'城墙',wood:200,stone:200,desc:'提高防守，抵御来袭'}
+};
+var SPECIAL = {
+  forge:{name:'铁匠铺',wood:200,stone:150,blue:'bp_forge',job:'铁匠',out:'精铁'},
+  mine:{name:'矿场',wood:120,stone:180,blue:'bp_mine',job:'矿工',out:'矿石'},
+  market:{name:'市集',wood:150,stone:80,blue:'bp_market',job:'商人',out:'金币'},
+  stable:{name:'马厩',wood:250,stone:100,blue:'bp_stable',job:'驯马师',out:'战马'},
+  watch:{name:'瞭望塔',wood:180,stone:220,blue:'bp_watch',job:'斥候',out:'情报'},
+  shrine:{name:'神殿',wood:300,stone:300,blue:'bp_shrine',job:'祭司',out:'民心'}
+};
+var ITEMS = {
+  bp_forge:{name:'铁匠铺图纸',cat:'图纸',desc:'绘着锻炉、风箱与砧位的完整图样。领地里有铁匠才能开工。'},
+  bp_mine:{name:'矿场图纸',cat:'图纸',desc:'标注了矿脉走向与支护结构。需要一名矿工主持开采。'},
+  bp_market:{name:'市集图纸',cat:'图纸',desc:'摊位、货栈、税亭的布局一目了然。商人进驻后每日收税。'},
+  bp_stable:{name:'马厩图纸',cat:'图纸',desc:'马槽、跑场与草料棚的规制。驯马师能让战马听令。'},
+  bp_watch:{name:'瞭望塔图纸',cat:'图纸',desc:'塔身高度与观察孔角度都有讲究。斥候驻守时可提前察觉来袭。'},
+  bp_shrine:{name:'神殿图纸',cat:'图纸',desc:'柱式与祭台规格，一笔不差。祭司主事后民心稳。'},
+  iron:{name:'精铁',cat:'材料',desc:'反复锻打出来的好铁，打兵器、修城墙都用得上。'},
+  ore:{name:'矿石',cat:'材料',desc:'从深层岩脉里挖出的原矿，杂质不少，但胜在量大。'},
+  horse:{name:'战马',cat:'材料',desc:'驯得服帖的好马，配给骑兵能显著提升机动。'},
+  hide:{name:'兽皮',cat:'材料',desc:'硝制过的整张兽皮，可以做甲片，也可以换钱。'},
+  gem:{name:'魔晶',cat:'材料',desc:'在暗处会自己发光的结晶。'},
+  potion:{name:'疗伤药',cat:'消耗品',desc:'气味刺鼻的褐色药膏，敷上去火辣辣地疼，但伤口收得很快。'},
+  grain:{name:'干粮包',cat:'消耗品',desc:'压得很实的饼子和肉干，关键时刻能顶几天。'},
+  scroll:{name:'征募文书',cat:'消耗品',desc:'盖了印的招募令，下次招兵少花一截钱。'},
+  sword:{name:'铁剑',cat:'装备',desc:'寻常样式的长剑，刃口磨得还算齐整。'},
+  armor:{name:'皮甲',cat:'装备',desc:'多层兽皮压成的护甲，轻便，挡得住流矢。'},
+  charm:{name:'护符',cat:'装备',desc:'刻着看不懂的纹路，戴着心里踏实些。'}
+};
+var ORIGINS = {
+  noble:{name:'世家子弟',desc:'门第深厚，起步就带一笔家底。',bonus:'金币 +300　木材 +100'},
+  hunter:{name:'边地猎户',desc:'从小在林子里讨生活。',bonus:'木材 +200　士兵 +2'},
+  merchant:{name:'商贾之后',desc:'算盘打得比刀快。',bonus:'金币 +250　交易行买入 -10%'},
+  officer:{name:'军中校尉',desc:'带过兵，知道怎么让队伍听令。',bonus:'士兵 +5　石料 +150'}
+};
+var NATURES = {
+  calm:{name:'沉稳',desc:'调度有度，吃粮少一些。',effect:'粮食消耗 -5%'},
+  bold:{name:'果决',desc:'出手快，伤亡也少。',effect:'出击折兵 30% → 22%'},
+  kind:{name:'温和',desc:'待人厚道，有人愿意跟着。',effect:'招兵出人才 8% → 12%'},
+  sly:{name:'狡黠',desc:'懂得挑软柿子捏。',effect:'宝箱品质提升'}
+};
+var FLAG = ['#c4483f','#d1791f','#c98a1f','#74961f','#2f9e5e','#1f9fb0','#3b8fd4','#7a5a31','#8a5fa8','#3c4a5a'];
+var NAME_POOL = ['玄砚','林砚','陆知白','裴照','沈岑','苏无咎','闻人诀','霍临','谢亭','顾长歌'];
+var NPC_LORDS = ['铁齿·霍恩','雪线以北','老陈的锄头','第七日','沼泽不眠','黑石堡','一亩三分','沙漠驼铃','霜牙','海风咸','草原孤狼','伐木累','青铜开箱手','平原守望','丘陵钉子户','雪崩之前','雾港','双刀领主','沉默的农夫','王城快递'];
+var RES_NAME = {wood:'木材',stone:'石料',food:'粮食',gold:'金币'};
+var RES_BASE = {wood:2,stone:3,food:2,gold:1};
+var HERO_NAMES = ['霍山','铁牙','白旌','阿骨','雷九','沉舟','子车','断江','柳七','盲狐'];
+var HERO_SKILLS = ['破阵：首回合伤害翻倍','坚守：受到伤害减半','疾行：立刻多打一仗','识途：宝箱品质提升一档','震慑：敌首回合无法行动'];
+var TALENT_NAMES = ['老周','柳娘','阿磐','赫连','焦七','石臼','陈九','苏禾','盲眼老吴','铁头'];
+var JOBS = ['铁匠','矿工','商人','驯马师','斥候','祭司'];
+var BOX_TIERS = [{name:'青铜',w:70},{name:'白银',w:22},{name:'黄金',w:6},{name:'铂金',w:1.6},{name:'钻石',w:0.4}];
+
+/* ---------- 存档 ---------- */
+function newGame(){
+  var e = ['forest','plain','desert','snow','swamp','grass','hill','island'];
+  return {
+    schema:SCHEMA, day:1, env:e[Math.floor(Math.random()*8)],
+    gold:500, wood:300, stone:200, food:400, pop:50, soldiers:0,
+    heroes:[], talents:[],
+    b:{house:5,farm:6,lumber:0,quarry:0,barracks:0,wall:0,forge:0,mine:0,market:0,stable:0,watch:0,shrine:0},
+    staff:{}, inventory:[], profile:null, palacePlaced:false, log:[],
+    channel:[], channelDay:0, market:[], marketDay:0, over:false
+  };
+}
+function save(){
+  try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){}
+}
+function load(){
+  var raw = localStorage.getItem(SAVE_KEY);
+  if(!raw){ var o = localStorage.getItem(OLD_KEY); if(o) raw = o; }
+  if(!raw) return newGame();
+  var s;
+  try{ s = JSON.parse(raw); }catch(e){ return newGame(); }
+  if(!s || typeof s !== 'object') return newGame();
+  var f = newGame(), k;
+  for(k in f){ if(s[k] === undefined) s[k] = f[k]; }
+  if(!s.b || typeof s.b !== 'object') s.b = {};
+  for(k in f.b){ if(typeof s.b[k] !== 'number') s.b[k] = f.b[k]; }
+  var sum = 0;
+  for(k in s.b){ sum += s.b[k]; }
+  if(sum === 0 && (s.day||1) <= 2){ s.b = JSON.parse(JSON.stringify(f.b)); }
+  if(!Array.isArray(s.inventory)) s.inventory = [];
+  if(!Array.isArray(s.talents)) s.talents = [];
+  if(!s.staff || typeof s.staff !== 'object') s.staff = {};
+  if(!ENV_FACTOR[s.env]) s.env = f.env;
+  s.schema = SCHEMA;
+  return s;
+}
+
+/* ---------- 工具 ---------- */
+function esc(t){
+  return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function rich(t){
+  var arr = String(t).split('\n'), out = [], i, l;
+  for(i = 0; i < arr.length; i++){
+    l = arr[i];
+    if(l.trim() === '') continue;
+    out.push('<p>' + esc(l).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>') + '</p>');
+  }
+  return out.join('');
+}
+function rnd(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+function say(t,c){
+  var el = $('narrative'), d = document.createElement('div');
+  if(c) d.className = c;
+  d.innerHTML = rich(t);
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
+function sayDay(n){
+  var el = $('narrative'), d = document.createElement('div');
+  d.className = 'n-days';
+  d.textContent = '— 第 ' + n + ' 天 —';
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
+function row(k,v){
+  return '<div class="row"><span>' + k + '</span><b>' + v + '</b></div>';
+}
+function line(k){
+  return '<div class="row"><span>' + k + '</span></div>';
+}
+
+/* ---------- 音频 ---------- */
+var AUDIO = (function(){
+  var ctx=null, master=null, bbus=null, sbus=null, abus=null, nbuf=null;
+  var on=false, step=0, ntime=0, stimer=null, atimer=null;
+  var CONF = {
+    forest:{root:62,bpm:88,amb:'bird'}, plain:{root:60,bpm:82,amb:'wind'},
+    desert:{root:62,bpm:76,amb:'sand'}, snow:{root:67,bpm:72,amb:'gale'},
+    swamp:{root:59,bpm:70,amb:'frog'}, grass:{root:65,bpm:90,amb:'insect'},
+    hill:{root:64,bpm:80,amb:'wind'}, island:{root:64,bpm:84,amb:'wave'}
+  };
+  var PROG=[0,7,5,9], DEG=[0,4,7,9,12,16], PAT=[0,2,1,3,2,4,3,5];
+
+  function mtof(m){ return 440 * Math.pow(2,(m-69)/12); }
+  function noise(){
+    if(nbuf) return nbuf;
+    var len = Math.floor(ctx.sampleRate*2);
+    nbuf = ctx.createBuffer(1,len,ctx.sampleRate);
+    var d = nbuf.getChannelData(0), i;
+    for(i=0;i<len;i++) d[i] = Math.random()*2-1;
+    return nbuf;
+  }
+  function pl(f,t,du,v,ty,bus){
+    var o=ctx.createOscillator(), g=ctx.createGain(), lp=ctx.createBiquadFilter();
+    o.type = ty || 'triangle';
+    o.frequency.value = f;
+    lp.type = 'lowpass';
+    lp.frequency.setValueAtTime(4200,t);
+    lp.frequency.exponentialRampToValueAtTime(900,t+du);
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.linearRampToValueAtTime(v,t+0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+du);
+    o.connect(lp); lp.connect(g); g.connect(bus || bbus);
+    o.start(t); o.stop(t+du+0.05);
+  }
+  function nh(t,du,f,q,v,bus){
+    var s=ctx.createBufferSource(), b=ctx.createBiquadFilter(), g=ctx.createGain();
+    s.buffer = noise();
+    b.type='bandpass'; b.frequency.value=f; b.Q.value=q;
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.linearRampToValueAtTime(v,t+0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+du);
+    s.connect(b); b.connect(g); g.connect(bus || sbus);
+    s.start(t); s.stop(t+du+0.02);
+  }
+  function bl(t,f1,f2,du,v,ty,bus){
+    var o=ctx.createOscillator(), g=ctx.createGain();
+    o.type = ty || 'triangle';
+    o.frequency.setValueAtTime(f1,t);
+    o.frequency.exponentialRampToValueAtTime(Math.max(40,f2),t+du);
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.linearRampToValueAtTime(v,t+0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+du);
+    o.connect(g); g.connect(bus || sbus);
+    o.start(t); o.stop(t+du+0.02);
+  }
+  function sstep(s,t){
+    var c = CONF[S.env] || CONF.plain;
+    var off = PROG[Math.floor(s/16)%4];
+    var bt = s % 16;
+    if(bt===0 || bt===8) pl(mtof(c.root-12+off), t, 0.55, 0.055, 'sine');
+    if(bt%2===0){
+      var d = DEG[PAT[(bt/2)%8]];
+      var oc = (bt===6||bt===14) ? 12 : 0;
+      pl(mtof(c.root+off+d+12+oc), t, 0.36, 0.05, 'triangle');
+    }
+    if(bt===4 || bt===12) pl(mtof(c.root+off+24+DEG[Math.floor(Math.random()*4)]), t, 0.3, 0.024, 'sine');
+  }
+  function tick(){
+    if(!on || !ctx) return;
+    var c = CONF[S.env] || CONF.plain;
+    var sd = 60 / c.bpm / 4;
+    while(ntime < ctx.currentTime + 0.12){
+      sstep(step, ntime);
+      ntime += sd;
+      step = (step+1) % 64;
+    }
+  }
+  function amb(){
+    if(!ctx || !on) return;
+    var c = CONF[S.env] || CONF.plain;
+    var t = ctx.currentTime, b, i;
+    if(c.amb === 'bird'){
+      b = 2000 + Math.random()*1400;
+      bl(t,b,b*1.5,0.09,0.028,'sine',abus);
+      bl(t+0.12,b*1.2,b*0.8,0.08,0.022,'sine',abus);
+      nh(t+0.3,0.9,3400,0.8,0.012,abus);
+    }else if(c.amb === 'wind' || c.amb === 'gale'){
+      nh(t,2.4,c.amb==='gale'?1400:700,0.7,c.amb==='gale'?0.035:0.025,abus);
+    }else if(c.amb === 'sand'){
+      for(i=0;i<5;i++) nh(t+i*0.09,0.07,3200+Math.random()*2000,5,0.02,abus);
+      nh(t+0.2,1.8,600,0.6,0.018,abus);
+    }else if(c.amb === 'frog'){
+      bl(t,320,220,0.16,0.035,'square',abus);
+      bl(t+0.22,300,200,0.14,0.028,'square',abus);
+    }else if(c.amb === 'insect'){
+      for(i=0;i<7;i++) bl(t+i*0.06,3800,3400,0.045,0.012,'sine',abus);
+    }else if(c.amb === 'wave'){
+      nh(t,2.8,500,0.5,0.045,abus);
+      nh(t+0.5,1.6,900,0.6,0.025,abus);
+    }
+    atimer = setTimeout(amb, 2600 + Math.random()*4200);
+  }
+  function start(){
+    if(!ctx){
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC) return false;
+      ctx = new AC();
+      master = ctx.createGain(); master.gain.value = 0.8; master.connect(ctx.destination);
+      bbus = ctx.createGain(); bbus.gain.value = 0.55; bbus.connect(master);
+      sbus = ctx.createGain(); sbus.gain.value = 1; sbus.connect(master);
+      abus = ctx.createGain(); abus.gain.value = 0.6; abus.connect(master);
+    }
+    if(ctx.state === 'suspended') ctx.resume();
+    if(on) return true;
+    on = true; ntime = ctx.currentTime + 0.1; step = 0;
+    stimer = setInterval(tick, 40);
+    atimer = setTimeout(amb, 900);
+    return true;
+  }
+  function stop(){
+    on = false;
+    if(stimer){ clearInterval(stimer); stimer = null; }
+    if(atimer){ clearTimeout(atimer); atimer = null; }
+    if(ctx && ctx.state === 'running') ctx.suspend();
+  }
+  function clash(){
+    if(!ctx || !on) return;
+    var t0 = ctx.currentTime, t, i;
+    for(i=0;i<4;i++){
+      t = t0 + i*0.08 + Math.random()*0.05;
+      nh(t,0.14,2600+Math.random()*2600,3.5,0.1);
+      bl(t,2800+Math.random()*1800,700,0.13,0.035,'square');
+    }
+  }
+  function crowd(){
+    if(!ctx || !on) return;
+    var t0 = ctx.currentTime;
+    var s = ctx.createBufferSource(); s.buffer = noise(); s.loop = true;
+    var b = ctx.createBiquadFilter(); b.type='bandpass'; b.Q.value=1.4;
+    b.frequency.setValueAtTime(500,t0);
+    b.frequency.linearRampToValueAtTime(900,t0+1.6);
+    var g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001,t0);
+    g.gain.linearRampToValueAtTime(0.055,t0+0.4);
+    g.gain.linearRampToValueAtTime(0.03,t0+1.4);
+    g.gain.exponentialRampToValueAtTime(0.0001,t0+2.2);
+    s.connect(b); b.connect(g); g.connect(sbus);
+    s.start(t0); s.stop(t0+2.3);
+    bl(t0+0.1,520,660,0.5,0.018,'sine');
+  }
+  function coin(){
+    if(!ctx || !on) return;
+    var t0 = ctx.currentTime, i;
+    for(i=0;i<3;i++) bl(t0+i*0.055,1400+i*260,1400+i*260,0.12,0.035,'sine');
+  }
+  function bld(){
+    if(!ctx || !on) return;
+    var t0 = ctx.currentTime, t, i;
+    for(i=0;i<3;i++){
+      t = t0 + i*0.16;
+      bl(t,180,90,0.12,0.1,'sine');
+      nh(t,0.08,1400,2,0.05);
+    }
+  }
+  function box(){
+    if(!ctx || !on) return;
+    var t0 = ctx.currentTime, n = [0,4,7,12], i;
+    for(i=0;i<4;i++) pl(mtof(72+n[i]), t0+i*0.075, 0.4, 0.06, 'triangle', sbus);
+  }
+  function bell(){
+    if(!ctx || !on) return;
+    var t0 = ctx.currentTime;
+    pl(mtof(76), t0, 1.4, 0.07, 'sine', sbus);
+    pl(mtof(83), t0+0.02, 1.1, 0.035, 'sine', sbus);
+    pl(mtof(64), t0+0.1, 1.6, 0.04, 'sine', sbus);
+  }
+  function fail(){
+    if(!ctx || !on) return;
+    bl(ctx.currentTime,300,180,0.25,0.05,'triangle');
+  }
+  return {
+    toggle:function(){ if(on){ stop(); return false; } return start(); },
+    isOn:function(){ return on; },
+    clash:clash, crowd:crowd, coin:coin, build:bld, box:box, bell:bell, fail:fail
+  };
+})();
+
+/* ---------- 弹窗 ---------- */
+function modal(o){
+  var box = $('mbox');
+  var html = '<h3>' + esc(o.title || '') + '</h3>';
+  html += '<div id="mtext">' + (o.html || esc(o.text || '')) + '</div>';
+  html += '<div id="mbtns"></div>';
+  box.innerHTML = html;
+  var holder = box.querySelector('#mbtns');
+  var list = o.buttons || [{label:'知道了', cls:'ok'}];
+  var i;
+  for(i=0;i<list.length;i++){
+    (function(b){
+      var el = document.createElement('button');
+      el.textContent = b.label;
+      if(b.cls) el.className = b.cls;
+      el.onclick = function(){
+        closeModal();
+        if(typeof b.fn === 'function') b.fn();
+      };
+      holder.appendChild(el);
+    })(list[i]);
+  }
+  $('mask').classList.add('on');
+}
+function closeModal(){ $('mask').classList.remove('on'); }
+function confirmBox(t,x,fn,l){
+  modal({title:t, text:x, buttons:[{label:'取消'},{label:l||'确定', cls:'ok', fn:fn}]});
+}
+
+/* ---------- 物品 ---------- */
+function addItem(k,q){
+  var i;
+  for(i=0;i<S.inventory.length;i++){
+    if(S.inventory[i].key === k){ S.inventory[i].qty += q; return; }
+  }
+  S.inventory.push({key:k, qty:q});
+}
+function hasItem(k,q){
+  var i;
+  for(i=0;i<S.inventory.length;i++){
+    if(S.inventory[i].key === k) return S.inventory[i].qty >= (q||1);
+  }
+  return false;
+}
+function useItem(k,q){
+  var i;
+  for(i=0;i<S.inventory.length;i++){
+    if(S.inventory[i].key === k){
+      S.inventory[i].qty -= (q||1);
+      if(S.inventory[i].qty <= 0) S.inventory.splice(i,1);
+      return true;
+    }
+  }
+  return false;
+}
+
+/* ---------- 出身与性情 ---------- */
+function originOf(){ return S.profile ? S.profile.origin : ''; }
+function natureOf(){ return S.profile ? S.profile.nature : ''; }
+function foodCostOf(b){ return natureOf() === 'calm' ? Math.round(b*0.95) : b; }
+function lossChance(){ return natureOf() === 'bold' ? 0.22 : 0.30; }
+function talentChance(){ return natureOf() === 'kind' ? 0.12 : 0.08; }
+function marketDiscount(){ return originOf() === 'merchant' ? 0.9 : 1; }
+
+/* ---------- 人物创建 ---------- */
+function showCreate(){
+  CR = {
+    name:pick(NAME_POOL), gender:'male', age:24,
+    origin:'noble', nature:'calm',
+    flagA:FLAG[4], flagB:FLAG[2]
+  };
+  $('crname').value = CR.name;
+  $('crage').value = 24;
+  $('crageshow').textContent = '24 岁';
+  renderCreateOpts();
+  updateFlag();
+  $('create').classList.add('on');
+}
+function renderCreateOpts(){
+  var i, k, gb;
+
+  gb = $$('#crgender button');
+  for(i=0;i<gb.length;i++) gb[i].classList.toggle('on', gb[i].getAttribute('data-g') === CR.gender);
+
+  var oh = '';
+  for(k in ORIGINS){
+    oh += '<button class="opt' + (CR.origin===k?' on':'') + '" data-origin="' + k + '">' +
+          '<b>' + ORIGINS[k].name + '</b><span>' + ORIGINS[k].desc + '</span><em>' + ORIGINS[k].bonus + '</em></button>';
+  }
+  $('crorigin').innerHTML = oh;
+
+  var nh = '';
+  for(k in NATURES){
+    nh += '<button class="opt' + (CR.nature===k?' on':'') + '" data-nature="' + k + '">' +
+          '<b>' + NATURES[k].name + '</b><span>' + NATURES[k].desc + '</span><em>' + NATURES[k].effect + '</em></button>';
+  }
+  $('crnature').innerHTML = nh;
+
+  var ah = '', bh = '';
+  for(i=0;i<FLAG.length;i++){
+    ah += '<button class="sw' + (CR.flagA===FLAG[i]?' on':'') + '" data-ca="' + FLAG[i] + '" style="background:' + FLAG[i] + '"></button>';
+    bh += '<button class="sw' + (CR.flagB===FLAG[i]?' on':'') + '" data-cb="' + FLAG[i] + '" style="background:' + FLAG[i] + '"></button>';
+  }
+  $('crcolorA').innerHTML = ah;
+  $('crcolorB').innerHTML = bh;
+
+  bindCreateOpts();
+}
+function updateFlag(){
+  $('crflag').style.background = 'linear-gradient(100deg,' + CR.flagA + ' 0 46%,' + CR.flagB + ' 54% 100%)';
+}
+function bindCreateOpts(){
+  var i, els;
+  els = $$('#crgender button');
+  for(i=0;i<els.length;i++){
+    (function(b){
+      b.onclick = function(){ CR.gender = b.getAttribute('data-g'); renderCreateOpts(); };
+    })(els[i]);
+  }
+  els = $$('[data-origin]');
+  for(i=0;i<els.length;i++){
+    (function(b){
+      b.onclick = function(){ CR.origin = b.getAttribute('data-origin'); renderCreateOpts(); };
+    })(els[i]);
+  }
+  els = $$('[data-nature]');
+  for(i=0;i<els.length;i++){
+    (function(b){
+      b.onclick = function(){ CR.nature = b.getAttribute('data-nature'); renderCreateOpts(); };
+    })(els[i]);
+  }
+  els = $$('[data-ca]');
+  for(i=0;i<els.length;i++){
+    (function(b){
+      b.onclick = function(){ CR.flagA = b.getAttribute('data-ca'); renderCreateOpts(); updateFlag(); };
+    })(els[i]);
+  }
+  els = $$('[data-cb]');
+  for(i=0;i<els.length;i++){
+    (function(b){
+      b.onclick = function(){ CR.flagB = b.getAttribute('data-cb'); renderCreateOpts(); updateFlag(); };
+    })(els[i]);
+  }
+}
+function bindCreate(){
+  $('crname').oninput = function(e){ CR.name = e.target.value; };
+  $('crage').oninput = function(e){
+    CR.age = parseInt(e.target.value,10);
+    $('crageshow').textContent = CR.age + ' 岁';
+  };
+  $('crgo').onclick = function(){
+    var n = (CR.name || '').replace(/^\s+|\s+$/g,'');
+    if(!n){
+      modal({title:'还差一步', text:'总得有个名字，才能把旗子立起来。', buttons:[{label:'知道了', cls:'ok'}]});
+      return;
+    }
+    CR.name = n;
+    finishCreate();
+  };
+}
+function finishCreate(){
+  S.profile = {
+    name:CR.name, gender:CR.gender, age:CR.age,
+    origin:CR.origin, nature:CR.nature,
+    flagA:CR.flagA, flagB:CR.flagB
+  };
+  if(CR.origin === 'noble'){ S.gold += 300; S.wood += 100; }
+  else if(CR.origin === 'hunter'){ S.wood += 200; S.soldiers += 2; }
+  else if(CR.origin === 'merchant'){ S.gold += 250; }
+  else if(CR.origin === 'officer'){ S.soldiers += 5; S.stone += 150; }
+  save();
+  $('create').classList.remove('on');
+  startGame();
+}
+
+/* ---------- 顶栏 ---------- */
+function refreshDaily(){
+  document.body.setAttribute('data-env', S.env);
+  $('barDay').textContent = '第 ' + S.day + ' 天';
+  $('barEnv').textContent = ENV_NAME[S.env];
+  $('barPop').textContent = S.pop + ' 人 · ' + S.soldiers + ' 兵 · ' + S.gold + ' 金';
+  var lock = S.day < 30;
+  $('tagch').classList.toggle('lock', lock);
+  $('tagmk').classList.toggle('lock', lock);
+  var sh = $('sheet');
+  if(sh.classList.contains('on')){
+    var t = sh.getAttribute('data-tab');
+    if(t === 'attr' || t === 'land') renderSheet(t);
+  }
+}
+
+/* ---------- 属性 ---------- */
+function renderAttr(){
+  var b = S.b;
+  var f = ENV_FACTOR[S.env];
+  var w = Math.min(b.farm, b.house*2);
+  var out = Math.round(w*10*f.food);
+  var cost = foodCostOf(S.pop + S.soldiers*2 + S.heroes.length*5);
+  var h = '', p;
+
+  if(S.profile){
+    p = S.profile;
+    h += '<div class="card"><h4>领主</h4>' +
+      row('姓名', esc(p.name)) +
+      row('性别 / 年龄', (p.gender==='female'?'女':'男') + '　' + p.age + ' 岁') +
+      row('出身', ORIGINS[p.origin].name) +
+      row('性情', NATURES[p.nature].name) +
+      '</div>';
+  }
+
+  h += '<div class="card"><h4>领地状态</h4>' +
+    row('天数','第 ' + S.day + ' 天') +
+    row('环境', ENV_NAME[S.env]) +
+    row('领主府', S.palacePlaced ? '已就位' : '未放置') +
+    row('人口', S.pop + ' 人') +
+    row('士兵', S.soldiers + ' 人') +
+    row('英雄', S.heroes.length + ' 名') +
+    row('人才', S.talents.length + ' 名') +
+  '</div>';
+
+  h += '<div class="card"><h4>资源</h4>' +
+    row('金币', S.gold) + row('木材', S.wood) +
+    row('石料', S.stone) + row('粮食', S.food) +
+  '</div>';
+
+  h += '<div class="card"><h4>每日收支</h4>' +
+    row('粮食产出', '+' + out + ' 份') +
+    row('粮食消耗', '-' + cost + ' 份') +
+    row('净变化', (out-cost>=0?'+':'') + (out-cost) + ' 份') +
+    row('可耕农田', w + ' / ' + b.farm + ' 亩') +
+  '</div>';
+
+  h += '<div class="card"><h4>存档</h4>' +
+    '<div class="grow"><button class="btn pri" onclick="openSaveIO()">导出 / 导入存档</button></div></div>';
+
+  return h;
+}
+
+/* ---------- 领地 ---------- */
+function renderLand(){
+  var h = '', i, k, base = ['house','farm','lumber','quarry','barracks','wall'];
+  var any = false;
+
+  h += '<div class="card"><h4>基础建筑</h4>';
+  for(i=0;i<base.length;i++){
+    k = base[i];
+    if(S.b[k] > 0){ any = true; h += row(BUILD[k].name, S.b[k] + ' 座'); }
+  }
+  if(!any) h += line('还没有任何建筑，去「建造」里动手');
+  h += '</div>';
+
+  h += '<div class="card"><h4>特殊建筑</h4>';
+  var sany = false;
+  for(k in SPECIAL){
+    if(S.b[k] > 0){
+      sany = true;
+      var cfg = SPECIAL[k], sf = null;
+      if(S.staff[k]){
+        for(i=0;i<S.talents.length;i++){
+          if(S.talents[i].id === S.staff[k]) sf = S.talents[i];
+        }
+      }
+      h += row(cfg.name, sf ? esc(sf.name) + '（' + cfg.job + '）' : '<span class="tag no">无人</span>');
+      h += '<div class="grow"><button class="btn" data-staff="' + k + '">人员安排</button></div>';
+    }
+  }
+  if(!sany) h += line('尚未建成。特殊建筑需要图纸与专人运作。');
+  h += '</div>';
+
+  h += '<div class="card"><h4>人才名册</h4>';
+  if(!S.talents.length){
+    h += line('暂无人才。招兵时偶尔有人跟来，宝箱里也可能藏着流民。');
+  }else{
+    for(i=0;i<S.talents.length;i++){
+      var t = S.talents[i], as = null;
+      for(k in S.staff){ if(S.staff[k] === t.id) as = SPECIAL[k].name; }
+      h += row(esc(t.name) + '　' + t.job, as ? as : '<span class="tag">闲置</span>');
+    }
+  }
+  h += '</div>';
+
+  return h;
+}
+
+/* ---------- 建造 ---------- */
+function renderBuild(){
+  var h = '', i, k, base = ['house','farm','lumber','quarry','barracks','wall'];
+  var c, can;
+
+  h += '<div class="card" style="background:var(--field)"><h4>基础建筑</h4></div>';
+  for(i=0;i<base.length;i++){
+    k = base[i];
+    c = BUILD[k];
+    can = (S.wood >= c.wood && S.stone >= c.stone);
+    h += '<div class="card"><h4>' + c.name + '</h4>' +
+      row('木材 / 石料', c.wood + ' / ' + c.stone) +
+      line(c.desc) +
+      '<div class="grow"><button class="btn' + (can?' pri':'') + '" data-build="' + k + '"' + (can?'':' disabled') + '>建造一座</button></div>' +
+    '</div>';
+  }
+
+  h += '<div class="card" style="background:var(--field)"><h4>特殊建筑</h4></div>';
+  for(k in SPECIAL){
+    var sp = SPECIAL[k];
+    var bp = hasItem(sp.blue,1);
+    var canS = (bp && S.wood >= sp.wood && S.stone >= sp.stone);
+    var built = S.b[k] || 0;
+    h += '<div class="card"><h4>' + sp.name +
+      (built ? '<span class="tag ok">已建 ' + built + '</span>' : '') +
+      '<span class="tag ' + (bp?'ok':'no') + '">' + (bp?'有图纸':'缺图纸') + '</span></h4>' +
+      row('木材 / 石料', sp.wood + ' / ' + sp.stone) +
+      row('需要图纸', ITEMS[sp.blue].name) +
+      row('需要专人', sp.job) +
+      row('产出', sp.out) +
+      '<div class="grow"><button class="btn' + (canS?' pri':'') + '" data-sbuild="' + k + '"' + (canS?'':' disabled') + '>' +
+        (built ? '再建一座' : '建造') + '</button></div>' +
+    '</div>';
+  }
+  return h;
+}
+
+/* ---------- 英雄 ---------- */
+function renderHero(){
+  var h = '', i;
+  if(!S.heroes.length){
+    return '<div class="card"><h4>尚无名将</h4>' + line('在兵营招募士兵时，有极小概率出英雄。') + '</div>';
+  }
+  for(i=0;i<S.heroes.length;i++){
+    var x = S.heroes[i];
+    h += '<div class="card"><h4>' + esc(x.name) + '</h4>' +
+      row('力量', x.str) + row('精力', x.eng) + row('特技', esc(x.skill)) +
+      '<div class="grow"><button class="btn" data-hero="' + i + '">查看详情</button></div></div>';
+  }
+  return h;
+}
+
+/* ---------- 仓库 ---------- */
+function renderStore(){
+  var h = '', i, c;
+  if(!S.inventory.length){
+    return '<div class="card"><h4>仓库是空的</h4>' + line('打据点开出的图纸、材料、装备都会收在这里。') + '</div>';
+  }
+  var cats = ['图纸','材料','消耗品','装备'];
+  for(c=0;c<cats.length;c++){
+    var list = [];
+    for(i=0;i<S.inventory.length;i++){
+      var it = ITEMS[S.inventory[i].key];
+      if(it && it.cat === cats[c]) list.push(S.inventory[i]);
+    }
+    if(!list.length) continue;
+    h += '<div class="card"><h4>' + cats[c] + '</h4>';
+    for(i=0;i<list.length;i++){
+      h += '<div class="row" data-item="' + list[i].key + '"><span>' + ITEMS[list[i].key].name +
+           '</span><b>× ' + list[i].qty + '</b></div>';
+    }
+    h += '</div>';
+  }
+  return h;
+}
+
+/* ---------- 行动 ---------- */
+function renderAct(){
+  var h = '';
+  h += '<div class="card"><h4>出击</h4>' +
+    line('带 ' + S.soldiers + ' 兵去打附近的小据点') +
+    row('折兵概率', Math.round(lossChance()*100) + '%') +
+    '<div class="grow"><button class="btn pri" data-act="attack">出击</button></div></div>';
+
+  h += '<div class="card"><h4>招兵</h4>' +
+    row('花费', '250 金') +
+    row('获得', '5 名士兵') +
+    row('英雄概率', '约 0.5%') +
+    row('人才概率', Math.round(talentChance()*100) + '%') +
+    '<div class="grow"><button class="btn" data-act="recruit"' + (S.gold<250?' disabled':'') + '>招募</button></div></div>';
+
+  h += '<div class="card"><h4>结束今天</h4>' +
+    line('结算产出与口粮，推进到第 ' + (S.day+1) + ' 天') +
+    '<div class="grow"><button class="btn pri" data-act="endday">结束今天</button></div></div>';
+
+  return h;
+}
+
+/* ---------- 抽屉 ---------- */
+var TAB_TITLE = {attr:'属性', land:'领地', build:'建造', hero:'英雄', store:'仓库', act:'行动'};
+
+function openSheet(tab){
+  $('stitle').textContent = TAB_TITLE[tab] || '属性';
+  $('sheet').setAttribute('data-tab', tab);
+  renderSheet(tab);
+  $('scrim').classList.add('on');
+  $('sheet').classList.add('on');
+}
+function closeSheet(){
+  $('scrim').classList.remove('on');
+  $('sheet').classList.remove('on');
+}
+function renderSheet(tab){
+  var b = $('sbody');
+  if(tab === 'attr')  b.innerHTML = renderAttr();
+  else if(tab === 'land')  b.innerHTML = renderLand();
+  else if(tab === 'build') b.innerHTML = renderBuild();
+  else if(tab === 'hero')  b.innerHTML = renderHero();
+  else if(tab === 'store') b.innerHTML = renderStore();
+  else if(tab === 'act')   b.innerHTML = renderAct();
+  bindSheetEvents();
+}
+function bindSheetEvents(){
+  var body = $('sbody'), i, els;
+
+  els = body.querySelectorAll('[data-build]');
+  for(i=0;i<els.length;i++){
+    (function(b){ b.onclick = function(){ doBuild(b.getAttribute('data-build')); }; })(els[i]);
+  }
+  els = body.querySelectorAll('[data-sbuild]');
+  for(i=0;i<els.length;i++){
+    (function(b){ b.onclick = function(){ doSpecialBuild(b.getAttribute('data-sbuild')); }; })(els[i]);
+  }
+  els = body.querySelectorAll('[data-act]');
+  for(i=0;i<els.length;i++){
+    (function(b){
+      b.onclick = function(){
+        var a = b.getAttribute('data-act');
+        if(a === 'attack') doAttack();
+        else if(a === 'recruit') doRecruit();
+        else if(a === 'endday') doEndDay();
+      };
+    })(els[i]);
+  }
+  els = body.querySelectorAll('[data-hero]');
+  for(i=0;i<els.length;i++){
+    (function(b){ b.onclick = function(){ showHero(parseInt(b.getAttribute('data-hero'),10)); }; })(els[i]);
+  }
+  els = body.querySelectorAll('[data-staff]');
+  for(i=0;i<els.length;i++){
+    (function(b){ b.onclick = function(){ openStaff(b.getAttribute('data-staff')); }; })(els[i]);
+  }
+  els = body.querySelectorAll('[data-item]');
+  for(i=0;i<els.length;i++){
+    (function(b){ b.onclick = function(){ showItem(b.getAttribute('data-item')); }; })(els[i]);
+  }
+}
+
+/* ---------- 建造动作 ---------- */
+function doBuild(k){
+  var c = BUILD[k];
+  if(!c) return;
+  if(S.wood < c.wood || S.stone < c.stone){
+    AUDIO.fail();
+    say('资源不够。「' + c.name + '」需要 ' + c.wood + ' 木材、' + c.stone + ' 石料。', 'n-bad');
+    return;
+  }
+  confirmBox('建造 ' + c.name,
+    '消耗 ' + c.wood + ' 木材、' + c.stone + ' 石料，建一座「' + c.name + '」。',
+    function(){
+      S.wood -= c.wood; S.stone -= c.stone;
+      S.b[k] = (S.b[k] || 0) + 1;
+      save(); AUDIO.build(); refreshDaily(); renderSheet('build');
+      say('**' + c.name + '**落成。工匠们拍拍手上的灰，陆续散开。', 'n-sys');
+    }, '开建');
+}
+
+function doSpecialBuild(k){
+  var c = SPECIAL[k];
+  if(!c) return;
+  if(!hasItem(c.blue,1)){
+    AUDIO.fail();
+    say('没有「' + ITEMS[c.blue].name + '」，造不了' + c.name + '。', 'n-bad');
+    return;
+  }
+  if(S.wood < c.wood || S.stone < c.stone){
+    AUDIO.fail();
+    say('资源不够。', 'n-bad');
+    return;
+  }
+  confirmBox('建造 ' + c.name,
+    '消耗「' + ITEMS[c.blue].name + '」一张、' + c.wood + ' 木材、' + c.stone + ' 石料。<br><br>建成后要在「领地」里指派一名' + c.job + '才能运作。',
+    function(){
+      useItem(c.blue,1);
+      S.wood -= c.wood; S.stone -= c.stone;
+      S.b[k] = (S.b[k] || 0) + 1;
+      save(); AUDIO.build(); refreshDaily(); renderSheet('build');
+      say('**' + c.name + '**建成了。图纸折好收进箱底，接下来得找个' + c.job + '。', 'n-sys');
+    }, '开建');
+}
+
+function openStaff(k){
+  var c = SPECIAL[k], i, kk;
+  var free = [], cur = null;
+
+  for(i=0;i<S.talents.length;i++){
+    var t = S.talents[i];
+    if(t.job !== c.job) continue;
+    var used = false;
+    for(kk in S.staff){ if(S.staff[kk] === t.id) used = true; }
+    if(!used) free.push(t);
+  }
+  if(S.staff[k]){
+    for(i=0;i<S.talents.length;i++){
+      if(S.talents[i].id === S.staff[k]) cur = S.talents[i];
+    }
+  }
+
+  var htm = '';
+  if(cur) htm += '<p>现任：<b>' + esc(cur.name) + '</b></p><br>';
+  if(!free.length){
+    htm += '<p>手上没有闲置的' + c.job + '。招兵的时候留意一下。</p>';
+    modal({title:c.name + ' · 人员安排', html:htm, buttons:[{label:'关闭', cls:'ok'}]});
+    return;
+  }
+
+  var names = [];
+  for(i=0;i<free.length;i++) names.push(esc(free[i].name));
+  htm += '<p>可指派的' + c.job + '：' + names.join('、') + '</p>';
+
+  var btns = [];
+  if(cur){
+    btns.push({label:'撤下', fn:function(){ delete S.staff[k]; save(); renderSheet('land'); }});
+  }
+  for(i=0;i<free.length && i<2;i++){
+    (function(t){
+      btns.push({label:t.name, cls:'ok', fn:function(){
+        S.staff[k] = t.id;
+        save(); AUDIO.crowd(); renderSheet('land');
+        say('**' + t.name + '**接手了' + c.name + '，当天就开始干活。', 'n-sys');
+      }});
+    })(free[i]);
+  }
+  btns.push({label:'取消'});
+  btns = btns.slice(0,3);
+
+  modal({title:c.name + ' · 人员安排', html:htm, buttons:btns});
+}
+
+function showItem(k){
+  var it = ITEMS[k];
+  if(!it) return;
+  var q = 0, i;
+  for(i=0;i<S.inventory.length;i++){ if(S.inventory[i].key === k) q = S.inventory[i].qty; }
+  modal({
+    title: it.name + (q ? '　×' + q : ''),
+    html: '<p>' + esc(it.desc) + '</p><br><p>分类：<b>' + it.cat + '</b></p>',
+    buttons:[{label:'关闭', cls:'ok'}]
+  });
+}
+
+/* ---------- 招兵 ---------- */
+function doRecruit(){
+  if(S.gold < 250){ AUDIO.fail(); say('金币不够，招募需要 250 金。', 'n-bad'); return; }
+  if(S.b.barracks < 1){ AUDIO.fail(); say('还没有兵营，招不了兵。', 'n-bad'); return; }
+
+  S.gold -= 250;
+  S.soldiers += 5;
+  AUDIO.crowd();
+  say('**5 名士兵**入列，军饷从今天起算。', 'n-sys');
+
+  if(Math.random() < 0.005 + S.soldiers*0.0002){
+    var hr = {name:pick(HERO_NAMES), str:12, eng:12, skill:pick(HERO_SKILLS)};
+    S.heroes.push(hr);
+    say('队伍里那个一直没说话的人走上前来，报了名字：**' + hr.name + '**。', 'n-sys');
+    say('特技 —— ' + hr.skill, 'n-sys');
+  }
+
+  if(Math.random() < talentChance()){
+    var jb = pick(JOBS);
+    var nt = {id:'t'+new Date().getTime()+rnd(10,99), name:pick(TALENT_NAMES), job:jb};
+    S.talents.push(nt);
+    say('招兵的队伍里跟来一个人，说自己是**' + jb + '**，叫' + nt.name + '。', 'n-sys');
+  }
+
+  save(); refreshDaily(); renderSheet('act');
+}
+
+function showHero(i){
+  var h = S.heroes[i];
+  if(!h) return;
+  modal({
+    title: h.name,
+    html: row('力量', h.str) + row('精力', h.eng) + row('特技', esc(h.skill)),
+    buttons:[{label:'关闭', cls:'ok'}]
+  });
+}
+
+/* ---------- 出击 ---------- */
+function rollBox(){
+  var t = [], i, tot = 0, r;
+  for(i=0;i<BOX_TIERS.length;i++) t.push({name:BOX_TIERS[i].name, w:BOX_TIERS[i].w});
+  if(natureOf() === 'sly'){ t[0].w = 55; t[1].w = 28; }
+  for(i=0;i<t.length;i++) tot += t[i].w;
+  r = Math.random() * tot;
+  for(i=0;i<t.length;i++){
+    if(r < t[i].w) return t[i].name;
+    r -= t[i].w;
+  }
+  return '青铜';
+}
+
+function doAttack(){
+  if(S.soldiers < 1){ AUDIO.fail(); say('手里一个兵都没有，打不了。', 'n-bad'); return; }
+
+  AUDIO.clash();
+  var loss = Math.random() < lossChance();
+  var box = rollBox();
+  var txt = '队伍摸黑出去，天没亮就回来了。\n带回来一个**' + box + '宝箱**。';
+  if(loss){ S.soldiers -= 1; txt += '\n少了一个人。点名的时候没人应。'; }
+
+  save(); refreshDaily(); renderSheet('act');
+  setTimeout(function(){ say(txt, 'n-sys'); }, 380);
+  setTimeout(function(){ openBox(box); }, 900);
+}
+
+function openBox(tier){
+  setTimeout(function(){ AUDIO.box(); }, 250);
+
+  var bn = {青铜:1, 白银:1.6, 黄金:2.4, 铂金:3.4, 钻石:5}[tier] || 1;
+  var roll = Math.random();
+  var lines = [], k, q, g, w, t, f, i, bps;
+
+  if(roll < 0.34){
+    g = Math.round(rnd(60,140)*bn); S.gold += g;
+    lines.push('金币 <b>' + g + '</b>');
+  }else if(roll < 0.50){
+    w = Math.round(rnd(40,90)*bn); S.wood += w;
+    lines.push('木材 <b>' + w + '</b>');
+  }else if(roll < 0.62){
+    t = Math.round(rnd(30,70)*bn); S.stone += t;
+    lines.push('石料 <b>' + t + '</b>');
+  }else if(roll < 0.72){
+    f = Math.round(rnd(50,110)*bn); S.food += f;
+    lines.push('粮食 <b>' + f + '</b> 份');
+  }else if(roll < 0.86){
+    k = pick(['iron','ore','hide','gem']);
+    q = Math.max(1, Math.round(rnd(1,3)*bn));
+    addItem(k,q);
+    lines.push(ITEMS[k].name + ' <b>×' + q + '</b>　<span style="color:var(--dim)">已入仓库</span>');
+  }else if(roll < 0.93){
+    k = pick(['potion','grain','scroll']);
+    q = Math.max(1, Math.round(rnd(1,2)*bn));
+    addItem(k,q);
+    lines.push(ITEMS[k].name + ' <b>×' + q + '</b>　<span style="color:var(--dim)">已入仓库</span>');
+  }else if(roll < 0.97){
+    k = pick(['sword','armor','charm']);
+    addItem(k,1);
+    lines.push(ITEMS[k].name + ' <b>×1</b>　<span style="color:var(--dim)">已入仓库</span>');
+  }else{
+    if(tier === '铂金' || tier === '钻石'){
+      bps = [];
+      for(k in ITEMS){ if(ITEMS[k].cat === '图纸') bps.push(k); }
+      k = pick(bps);
+      addItem(k,1);
+      lines.push('<b>' + ITEMS[k].name + '</b>　<span style="color:var(--dim)">已入仓库，可建特殊建筑</span>');
+    }else{
+      g = Math.round(rnd(150,260)*bn); S.gold += g;
+      lines.push('金币 <b>' + g + '</b>');
+    }
+  }
+
+  if(Math.random() < 0.05){
+    var jb = pick(JOBS);
+    var nt = {id:'t'+new Date().getTime()+rnd(10,99), name:pick(TALENT_NAMES), job:jb};
+    S.talents.push(nt);
+    lines.push('箱底还跟着一个人：**' + nt.name + '**，会' + jb + '。');
+  }
+
+  save();
+  modal({title:tier + '宝箱', html:lines.join('<br>'), buttons:[{label:'收下', cls:'ok'}]});
+}
+
+/* ---------- 结束今天 ---------- */
+function doEndDay(){
+  if(S.over) return;
+
+  var f = ENV_FACTOR[S.env];
+  var w = Math.min(S.b.farm, S.b.house*2);
+  var fo = Math.round(w*10*f.food);
+  var wo = Math.round(S.b.lumber*20*f.wood);
+  var so = Math.round(S.b.quarry*15*f.stone);
+  var go = Math.round(S.b.house*6);
+  var fc = foodCostOf(S.pop + S.soldiers*2 + S.heroes.length*5);
+
+  S.food += fo; S.wood += wo; S.stone += so; S.gold += go; S.food -= fc;
+
+  var lines = [];
+  lines.push('粮食 **+' + fo + '** / **-' + fc + '**');
+  if(wo) lines.push('木材 **+' + wo + '**');
+  if(so) lines.push('石料 **+' + so + '**');
+  if(go) lines.push('税收 **+' + go + ' 金**');
+
+  var k, i, t, bo;
+  for(k in SPECIAL){
+    if(!S.b[k] || !S.staff[k]) continue;
+    t = null;
+    for(i=0;i<S.talents.length;i++){ if(S.talents[i].id === S.staff[k]) t = S.talents[i]; }
+    if(!t || t.job !== SPECIAL[k].job) continue;
+
+    if(k === 'market'){ S.gold += 30; lines.push('市集收税 **+30 金**'); }
+    else if(k === 'mine'){ S.stone += 25; lines.push('矿场出料 **+25 石料**'); }
+    else if(k === 'forge'){ addItem('iron',2); lines.push('铁匠铺打出 **精铁 ×2**'); }
+    else if(k === 'stable'){ addItem('horse',1); lines.push('马厩驯出 **战马 ×1**'); }
+    else if(k === 'watch'){ lines.push('瞭望塔报告：周围**平安无事**'); }
+    else if(k === 'shrine'){
+      bo = Math.round(S.pop*0.5);
+      S.food += bo;
+      lines.push('神殿祈福，多收 **' + bo + ' 份粮**');
+    }
+  }
+
+  if(S.food < 0){
+    S.food = 0;
+    var fl = Math.max(1, Math.round(S.pop*0.12));
+    S.pop = Math.max(0, S.pop - fl);
+    lines.push('粮仓空了。**' + fl + ' 人**连夜走了。');
+  }
+
+  S.day++;
+  AUDIO.bell();
+  sayDay(S.day);
+  say(lines.join('\n'), 'n-sys');
+
+  if(S.pop <= 0){
+    S.over = true;
+    say('领地上再没有炊烟。最后一个人走的时候，把门也带上了。', 'n-bad');
+    save(); refreshDaily(); return;
+  }
+  if(S.day === 30){
+    say('三十天的隔离结束了。**世界频道**和**交易行**同时开放，就在左上角。', 'n-sys');
+  }
+
+  save(); refreshDaily();
+  if($('sheet').classList.contains('on')) renderSheet($('sheet').getAttribute('data-tab') || 'act');
+}
+
+/* ---------- 世界频道 ---------- */
+function ensureWorld(){
+  if(!Array.isArray(S.channel)){ S.channel = []; S.channelDay = 0; }
+  if(!Array.isArray(S.market)){ S.market = []; S.marketDay = 0; }
+  if(typeof S.channelDay !== 'number') S.channelDay = 0;
+  if(typeof S.marketDay !== 'number') S.marketDay = 0;
+}
+function channelLine(){
+  var t = rnd(1,10);
+  if(t === 1) return '这破地方第一天就饿死了两个，谁有粮，双倍价收。';
+  if(t === 2) return '森林东边那个据点青铜箱出了张图纸，运气不错。';
+  if(t === 3) return '问一下，你们那边的石头是不是也不够用？我田都还没铺完。';
+  if(t === 4) return '别往北边走，雪山上那帮人打起来不讲道理的。';
+  if(t === 5) return '第 ' + S.day + ' 天了，我的领主府还是一片空地，笑死。';
+  if(t === 6) return '有人打到过铂金箱吗？我打了六个据点全是青铜，怀疑有问题。';
+  if(t === 7) return '粮价要涨了，各位屯着吧。';
+  if(t === 8) return '我隔壁那位领主昨天带兵来我门口晃了一圈，什么也没干就走了，挺吓人的。';
+  if(t === 9) return '问一句，英雄到底怎么升？我招了二十个兵出一个，现在还是十二力。';
+  return '新手别急着扩田，房子不够农户跑了比饿死还快。';
+}
+function seedChannel(){
+  ensureWorld();
+  var i, n;
+  while(S.channelDay < S.day){
+    S.channelDay++;
+    n = rnd(1,3);
+    for(i=0;i<n;i++){
+      S.channel.push({day:S.channelDay, lord:pick(NPC_LORDS), text:channelLine()});
+    }
+  }
+  if(S.channel.length > 200) S.channel = S.channel.slice(-200);
+}
+function renderChannel(){
+  var el = $('wch'), i, list, h = '';
+  if(S.day < 30){
+    el.innerHTML = '<div class="wlock">世界频道尚未开启<em>第 ' + (30-S.day) + ' 天后开放</em></div>';
+    return;
+  }
+  seedChannel();
+  if(!S.channel.length){ el.innerHTML = '<div class="wempty">暂无消息</div>'; return; }
+  list = S.channel.slice(-60).reverse();
+  for(i=0;i<list.length;i++){
+    h += '<div class="wmsg"><i>第' + list[i].day + '天</i><b>' + esc(list[i].lord) + '</b>：' + esc(list[i].text) + '</div>';
+  }
+  el.innerHTML = h;
+}
+
+/* ---------- 交易行 ---------- */
+function seedMarket(){
+  ensureWorld();
+  if(S.marketDay === S.day) return;
+  S.marketDay = S.day;
+
+  var keep = [], i;
+  for(i=0;i<S.market.length;i++){ if(Math.random() > 0.3) keep.push(S.market[i]); }
+  S.market = keep;
+
+  var n = rnd(4,7) + Math.min(4, Math.floor(S.day/10));
+  for(i=0;i<n;i++){
+    var res = pick(['wood','stone','food']);
+    S.market.push({
+      id:'m' + S.day + '_' + i + '_' + Math.random().toString(36).slice(2,6),
+      lord:pick(NPC_LORDS), res:res, qty:rnd(20,120),
+      price:Math.max(1, Math.round(RES_BASE[res]*(0.7+Math.random()*0.8)*100)/100)
+    });
+  }
+}
+function renderMarket(){
+  var el = $('wmk'), i, h = '', m;
+  if(S.day < 30){
+    el.innerHTML = '<div class="wlock">交易行尚未开启<em>第 ' + (30-S.day) + ' 天后开放</em></div>';
+    return;
+  }
+  seedMarket();
+  if(!S.market.length){ el.innerHTML = '<div class="wempty">今天的货被抢光了，明天再来</div>'; return; }
+
+  for(i=0;i<S.market.length;i++){
+    m = S.market[i];
+    h += '<div class="wlot"><div class="r"><span class="n">' + RES_NAME[m.res] + ' × ' + m.qty + '</span>' +
+         '<span class="p">' + m.price.toFixed(2) + ' 金/份</span></div>' +
+         '<div class="s">卖家：' + esc(m.lord) + '　总价 ' + Math.round(m.price*m.qty*marketDiscount()) + ' 金</div>' +
+         '<button class="wbuy" data-id="' + m.id + '">买入</button></div>';
+  }
+  el.innerHTML = h;
+
+  var btns = el.querySelectorAll('.wbuy');
+  for(i=0;i<btns.length;i++){
+    (function(b){ b.onclick = function(){ buyLot(b.getAttribute('data-id')); }; })(btns[i]);
+  }
+}
+function buyLot(id){
+  var idx = -1, i, m, cost;
+  for(i=0;i<S.market.length;i++){ if(S.market[i].id === id) idx = i; }
+  if(idx < 0) return;
+
+  m = S.market[idx];
+  cost = Math.round(m.price * m.qty * marketDiscount());
+
+  if(S.gold < cost){
+    AUDIO.fail();
+    modal({title:'金币不够', text:'这一单要 ' + cost + ' 金，你手上只有 ' + S.gold + ' 金。', buttons:[{label:'知道了', cls:'ok'}]});
+    return;
+  }
+
+  S.gold -= cost;
+  S[m.res] = (S[m.res] || 0) + m.qty;
+  S.market.splice(idx,1);
+  save(); AUDIO.coin(); renderMarket(); refreshDaily();
+  say('从交易行吃进 **' + RES_NAME[m.res] + ' × ' + m.qty + '**，付了 ' + cost + ' 金。', 'n-sys');
+}
+
+function openWorld(which){
+  if(S.day < 30){
+    AUDIO.fail();
+    modal({
+      title:'还没到点',
+      html:'世界频道和交易行都要等到<b>第 30 天</b>才开放。<br><br>现在是第 <b>' + S.day + '</b> 天，还剩 <b>' + (30-S.day) + '</b> 天。',
+      buttons:[{label:'知道了', cls:'ok'}]
+    });
+    return;
+  }
+  $('world').classList.add('on');
+  switchWorld(which);
+  save();
+}
+function switchWorld(w){
+  var c = (w !== 'mk');
+  $('wtitle').textContent = c ? '世 界 频 道' : '交 易 行';
+  $('wch').style.display = c ? 'block' : 'none';
+  $('wmk').style.display = c ? 'none' : 'block';
+  if(c) renderChannel(); else renderMarket();
+}
+function bindWorld(){
+  $('tagch').onclick = function(){ openWorld('ch'); };
+  $('tagmk').onclick = function(){ openWorld('mk'); };
+  $('wclose').onclick = function(){ $('world').classList.remove('on'); };
+}
+
+/* ---------- 存档 IO ---------- */
+function openSaveIO(){
+  save();
+  $('iotext').value = localStorage.getItem(SAVE_KEY) || '';
+  $('saveio').classList.add('on');
+}
+function bindSaveIO(){
+  $('iocopy').onclick = function(){
+    var ta = $('iotext'), ok = false;
+    ta.select();
+    try{ ok = document.execCommand('copy'); }catch(e){ ok = false; }
+    if(!ok && navigator.clipboard) navigator.clipboard.writeText(ta.value).catch(function(){});
+    var b = $('iocopy');
+    b.textContent = '已复制';
+    setTimeout(function(){ b.textContent = '复制'; }, 1400);
+  };
+  $('ioload').onclick = function(){
+    var v = $('iotext').value;
+    v = v.replace(/^\s+|\s+$/g,'');
+    if(!v) return;
+    try{ JSON.parse(v); }
+    catch(e){
+      modal({title:'格式不对', text:'这段文字不是有效的存档码。', buttons:[{label:'知道了', cls:'ok'}]});
+      return;
+    }
+    localStorage.setItem(SAVE_KEY, v);
+    location.reload();
+  };
+  $('ioclose').onclick = function(){ $('saveio').classList.remove('on'); };
+}
+
+/* ---------- 攻略 ---------- */
+var HELP = [
+['开局流程','第一次进来先问要不要接 AI，然后进入人物创建：姓名、性别、年龄、出身、性情、旗帜配色。这几项写进存档，之后在「属性」页能看。'],
+['四种出身','<b>世家子弟</b>　金币 +300，木材 +100。<br><b>边地猎户</b>　木材 +200，士兵 +2。<br><b>商贾之后</b>　金币 +250，交易行便宜一成。<br><b>军中校尉</b>　士兵 +5，石料 +150。'],
+['四种性情','<b>沉稳</b>　粮食消耗少五个点。<br><b>果决</b>　出击折兵三成降到两成二。<br><b>温和</b>　招兵出人才百分之八提到十二。<br><b>狡黠</b>　宝箱品质整体提升。'],
+['顶栏','<b>频道</b>　世界频道，第三十天开放。<br><b>交易</b>　交易行，第三十天开放。<br><b>♪</b>　音频总开关：环境背景音乐、环境音（鸟叫风虫鸣海浪）、操作音效（刀剑、人声、开箱、收税、钟声）。<br><b>?</b>　这一页。'],
+['底部六个标签','可以左右滑。<br><b>属性</b>　天数、人口、资源、收支、存档导出。<br><b>领地</b>　已建成的建筑，特殊建筑在这里指派人员。<br><b>建造</b>　造基础与特殊建筑。<br><b>英雄</b>　手上的英雄。<br><b>仓库</b>　开箱得到的图纸、材料、消耗品、装备，点一件看介绍。<br><b>行动</b>　出击、招兵、结束今天。'],
+['粮食','人每天吃 1 份，兵吃 2 份，英雄吃 5 份。一亩田日产 10 份乘环境系数。田地必须有农户种，每栋房屋住两户。农户不够时田再多也白搭。粮食见底每天跑掉一成二。'],
+['六种基础建筑','房屋 100 木 50 石，出两户农户。<br>农田 50 木，一亩日产 10 份粮。<br>伐木场 80 木 20 石，日产 20 木材。<br>采石场 60 木 40 石，日产 15 石料。<br>兵营 150 木 100 石，招兵前提。<br>城墙 200 木 200 石。'],
+['特殊建筑','六种：铁匠铺、矿场、市集、马厩、瞭望塔、神殿。两道门槛：<br><b>一是图纸</b>　只能从铂金箱和钻石箱开出，进仓库。没图纸按钮是灰的。<br><b>二是专人</b>　建好后去「领地」点「人员安排」，指派对口手艺人进去才开始干活。'],
+['人才从哪来','招兵约百分之八跟着来一个，开箱约百分之五箱底藏着流民。六种职业，一个人才只能管一座建筑。'],
+['招兵与出击','招一次 250 金给 5 个兵，千分之五左右出英雄。出击必定带回宝箱，三成概率折兵。五档箱子：青铜白银黄金铂金钻石，图纸只在铂金和钻石里出。'],
+['存档','存在这台设备上。换手机前去「属性」最下面导出存档码，复制走。']
+];
+function renderHelp(){
+  var h = '', i;
+  for(i=0;i<HELP.length;i++) h += '<h3>' + HELP[i][0] + '</h3><p>' + HELP[i][1] + '</p>';
+  return h;
+}
+function bindHelp(){
+  $('helpbtn').onclick = function(){
+    $('helpbody').innerHTML = renderHelp();
+    $('helppage').classList.add('on');
+  };
+  $('hclose').onclick = function(){ $('helppage').classList.remove('on'); };
+}
+
+/* ---------- 自由行动 ---------- */
+function buildPrompt(){
+  return '你是一款领主经营文字游戏的叙述者。\n' +
+    '当前状态：第' + S.day + '天，环境' + ENV_NAME[S.env] + '，人口' + S.pop + '，士兵' + S.soldiers +
+    '，金币' + S.gold + '，木材' + S.wood + '，石料' + S.stone + '，粮食' + S.food + '。\n' +
+    '用第二人称"你"叙述，中文，150字以内，只描述世界和 NPC 的反应，不替玩家做决定。\n' +
+    '不要输出任何数值结算。';
+}
+function freeAction(text){
+  var key = localStorage.getItem('ds_key') || '';
+  if(!key){
+    say('（还没接入 AI。第一次进入时填上密钥，才能用自由行动。）', 'n-bad');
+    return;
+  }
+  say('> ' + text, 'n-sys');
+  busy = true;
+  fetch('https://api.deepseek.com/v1/chat/completions', {
+    method:'POST',
+    headers:{'Content-Type':'application/json', 'Authorization':'Bearer ' + key},
+    body:JSON.stringify({
+      model:'deepseek-chat',
+      messages:[{role:'system',content:buildPrompt()},{role:'user',content:text}],
+      temperature:0.9, max_tokens:400
+    })
+  }).then(function(r){
+    if(!r.ok) throw new Error('http');
+    return r.json();
+  }).then(function(d){
+    var o = '';
+    if(d.choices && d.choices[0] && d.choices[0].message) o = d.choices[0].message.content;
+    if(o) say(o);
+    else say('（顾问沉默了一会儿，什么也没说。）', 'n-sys');
+    busy = false;
+  }).catch(function(){
+    say('（信号断了，顾问没有回应。）', 'n-bad');
+    busy = false;
+  });
+}
+
+/* ---------- 启动 ---------- */
+function syncViewport(){
+  var vv = window.visualViewport;
+  if(!vv) return;
+  function set(){
+    document.documentElement.style.setProperty('--vh', vv.height + 'px');
+  }
+  vv.addEventListener('resize', set);
+  vv.addEventListener('scroll', set);
+  set();
+}
+function bindBgm(){
+  $('bgmbtn').onclick = function(){
+    var o = AUDIO.toggle();
+    $('bgmbtn').classList.toggle('on', o);
+    localStorage.setItem('bgm_on', o ? '1' : '0');
+  };
+  if(localStorage.getItem('bgm_on') === '1'){
+    setTimeout(function(){
+      say('（上次的音乐还存着。iOS 不让网页自动出声，点一下右上角的 ♪ 就接上。）', 'n-sys');
+    }, 900);
+  }
+}
+function askKey(after){
+  var cur = localStorage.getItem('ds_key') || '';
+  modal({
+    title:'DeepSeek 密钥',
+    html:'<input id="keyin" type="text" value="' + esc(cur) + '" placeholder="sk-..." style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--line2);background:var(--field);color:var(--text);font-size:13px;outline:none">',
+    buttons:[
+      {label:'取消', fn:after},
+      {label:'保存', cls:'ok', fn:function(){
+        var i = $('keyin');
+        if(i) localStorage.setItem('ds_key', i.value.replace(/^\s+|\s+$/g,''));
+        say('顾问已经就位。有什么想问的，直接写在下面。', 'n-sys');
+        if(after) after();
+      }}
+    ]
+  });
+}
+
+function startGame(){
+  if(!S.log || !S.log.length){
+    S.log = [];
+    var nm = S.profile ? S.profile.name : '领主';
+    sayDay(1);
+    say(nm + '，你睁开眼，脚下是**' + ENV_NAME[S.env] + '**。风从很远的地方吹过来，带着土腥味。', 'n-sys');
+    say('身后站着五十个人，没有人说话。他们看着你，等你说点什么。', 'n-sys');
+    say('领主府的地基已经打好了，就压在离你三步远的地方。你走过去，把它按进土里。', 'n-sys');
+    S.palacePlaced = true;
+    save();
+  }else{
+    sayDay(S.day);
+    say('领地还在。人和昨天一样多，或者少一点。', 'n-sys');
+  }
+  refreshDaily();
+}
+
+function boot(){
+  syncViewport();
+  S = load();
+  document.body.setAttribute('data-env', S.env);
+
+  bindWorld();
+  bindHelp();
+  bindBgm();
+  bindSaveIO();
+  bindCreate();
+  bindSheetEvents();
+
+  var tb = $$('#tabbar button'), i;
+  for(i=0;i<tb.length;i++){
+    (function(b){ b.onclick = function(){ openSheet(b.getAttribute('data-tab')); }; })(tb[i]);
+  }
+
+  $('scrim').onclick = closeSheet;
+  $('sclose').onclick = closeSheet;
+  $('mask').onclick = function(e){ if(e.target.id === 'mask') closeModal(); };
+
+  $('send').onclick = function(){
+    var v = $('input').value.replace(/^\s+|\s+$/g,'');
+    if(!v || busy) return;
+    $('input').value = '';
+    freeAction(v);
+  };
+  $('input').addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      $('send').onclick();
+    }
+  });
+
+  if(!S.profile){
+    if(!localStorage.getItem('ds_key')){
+      setTimeout(function(){
+        modal({
+          title:'接入 AI（可选）',
+          html:'不填也能玩，建筑、战斗、交易、音效全部可用。<br>填了之后，底部输入框可以问顾问。<br><br>密钥存在本机。',
+          buttons:[
+            {label:'以后再说', fn:showCreate},
+            {label:'去填写', cls:'ok', fn:function(){ askKey(showCreate); }}
+          ]
+        });
+      }, 400);
+    }else{
+      showCreate();
+    }
+  }else{
+    startGame();
+    if(!localStorage.getItem('ds_key')){
+      setTimeout(function(){
+        modal({
+          title:'接入 AI（可选）',
+          html:'不填也能玩。<br>填了之后，底部输入框可以问顾问。',
+          buttons:[
+            {label:'以后再说'},
+            {label:'去填写', cls:'ok', fn:function(){ askKey(null); }}
+          ]
+        });
+      }, 700);
+    }
+  }
+}
+
+boot();
+</script>
+</body>
+</html>
