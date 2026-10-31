@@ -201,6 +201,7 @@ body[data-env="island"]{--bg:#e9f6f8;--acc:#2f9fb0;--soft:#d3edf1}
 #toast.on{opacity:1;transform:translate(-50%,0)}
 </style>
 </head>
+
 <body data-env="forest">
 
 <div id="app">
@@ -331,7 +332,7 @@ body[data-env="island"]{--bg:#e9f6f8;--acc:#2f9fb0;--soft:#d3edf1}
 <script>
 var S = null, busy = false, CR = null, curTab = 'act', curMapSel = -1, curWorld = 'ch';
 var NO_LOG = false;
-var SAVE_KEY = 'lingzhu_v18', SCHEMA = 19;
+var SAVE_KEY = 'lingzhu_v19', SCHEMA = 21;
 var LV_NAME = ['初级', '中级', '高级'];
 var LV_MUL = [1, 1.6, 2.4];
 
@@ -350,7 +351,7 @@ var ENV_RULE = {
     scout:-1, lumber:1.2, lootHide:true, waterNeed:1, event:0},
   plain:{good:'农田 +10%，人口长得快',bad:'无遮无挡，城墙效果打七折',
     farm:1.1, popGrow:1.5, wall:0.7, waterNeed:1, event:0},
-  desert:{good:'视野开阔，侦查 +1 次，矿石翻倍',bad:'极度缺水，耗水 +60%，建水井能撑住',
+  desert:{good:'视野开阔，侦查 +1 次，矿石翻倍',bad:'极度缺水，耗水 +60%',
     scout:1, ore:2, foodNeed:1.06, waterNeed:1.6, event:0},
   snow:{good:'敌人不适应，守备体力 -15%',bad:'严寒，每天多损耗 3% 存粮',
     enemyHp:0.85, foodLoss:0.03, waterNeed:0.8, event:0},
@@ -368,17 +369,17 @@ var BUILD = {
   house:{name:'房屋',wood:100,stone:50,desc:'一座住一户人家，等级越高住得越多'},
   well:{name:'水井',wood:60,stone:80,desc:'有水井才有干净水，沙漠里尤其要紧'},
   farm:{name:'农田',wood:50,stone:0,desc:'日产粮食，得有人住才种得开'},
-  lumber:{name:'伐木场',wood:80,stone:20,desc:'日产木材，偶尔有猎户送皮子来'},
-  quarry:{name:'采石场',wood:60,stone:40,desc:'日产石料，石缝里能剥出矿石'},
-  ironmine:{name:'铁矿洞',wood:120,stone:90,desc:'凿开石壁挖精铁，顺手出石料'},
-  coalmine:{name:'煤矿洞',wood:100,stone:80,desc:'黑得发亮的煤，打铁烧窑都得用'},
+  lumber:{name:'伐木场',wood:80,stone:20,desc:'日产木材，只出木头，不兼出皮子'},
+  quarry:{name:'采石场',wood:60,stone:40,desc:'日产石料，只出石头，矿另有着落'},
   barracks:{name:'兵营',wood:150,stone:100,desc:'招兵在这里，等级越高招兵越便宜'},
   wall:{name:'城墙',wood:200,stone:200,desc:'挡住夜里摸过来的人'}
 };
 
 var SPECIAL = {
   forge:{name:'铁匠铺',wood:200,stone:150,blue:'bp_forge',job:'铁匠',out:'每日精铁 +2，可强化装备'},
-  mine:{name:'矿场',wood:120,stone:180,blue:'bp_mine',job:'矿工',out:'每日矿石 +3'},
+  mine:{name:'矿场',wood:120,stone:180,blue:'bp_mine',job:'矿工',out:'每日矿石 +4'},
+  smelter:{name:'冶铁坊',wood:220,stone:200,blue:'bp_smelter',job:'铁匠',out:'每 3 矿石炼 1 精铁'},
+  colliery:{name:'煤窑',wood:180,stone:160,blue:'bp_colliery',job:'矿工',out:'每日煤炭 +3'},
   market:{name:'市集',wood:150,stone:80,blue:'bp_market',job:'商人',out:'每日金币 +30'},
   stable:{name:'马厩',wood:250,stone:100,blue:'bp_stable',job:'驯马师',out:'每日战马 +1'},
   watch:{name:'瞭望塔',wood:180,stone:220,blue:'bp_watch',job:'斥候',out:'侦查不耗精力'},
@@ -388,6 +389,8 @@ var SPECIAL = {
 var ITEMS = {
   bp_forge:{name:'铁匠铺图纸',cat:'图纸',desc:'绘着锻炉、风箱与砧位的完整图样。领地里有铁匠才能开工。'},
   bp_mine:{name:'矿场图纸',cat:'图纸',desc:'标注了矿脉走向与支护结构。需要一名矿工主持开采。'},
+  bp_smelter:{name:'冶铁坊图纸',cat:'图纸',desc:'炉膛、风道与出铁口的尺寸都标着。铁匠主持后，矿石才能炼成精铁。'},
+  bp_colliery:{name:'煤窑图纸',cat:'图纸',desc:'窑口朝向和通风暗道的走法。矿工接手后每日出煤。'},
   bp_market:{name:'市集图纸',cat:'图纸',desc:'摊位、货栈、税亭的布局一目了然。商人进驻后每日收税。'},
   bp_stable:{name:'马厩图纸',cat:'图纸',desc:'马槽、跑场与草料棚的规制。驯马师能让战马听令。'},
   bp_watch:{name:'瞭望塔图纸',cat:'图纸',desc:'塔身高度与观察孔角度都有讲究。斥候驻守时看得更远。'},
@@ -397,10 +400,10 @@ var ITEMS = {
   bp_tca:{name:'骑兵营图',cat:'兵营',troop:'cavalry',desc:'马厩连着跑道，草料和蹄铁各有位置。用了就能招骑兵。'},
   iron:{name:'精铁',cat:'材料',desc:'反复锻打出来的好铁，晋升兵种全靠它。'},
   coal:{name:'煤炭',cat:'材料',desc:'黑得发亮，烧起来烟小。高级晋升和强化装备都要用。'},
-  ore:{name:'矿石',cat:'材料',desc:'从深层岩脉里挖出的原矿，杂质不少，但胜在量大。'},
+  ore:{name:'矿石',cat:'材料',desc:'从深层岩脉里挖出的原矿。送进冶铁坊，三份能炼一份精铁。'},
   horse:{name:'战马',cat:'材料',desc:'驯得服帖的好马，骑兵晋升要用。'},
   hide:{name:'兽皮',cat:'材料',desc:'硝制过的整张兽皮，可以做甲片，也可以换钱。'},
-  gem:{name:'魔晶',cat:'材料',desc:'在暗处会自己发光的结晶，稀有得很。'},
+  gem:{name:'魔晶',cat:'材料',desc:'在暗处会自己发光的结晶。装备要突破到高阶，全得靠它。'},
   potion:{name:'疗伤药',cat:'消耗品',desc:'气味刺鼻的褐色药膏，敷上去火辣辣地疼，但伤口收得很快。',use:'heal'},
   grain:{name:'干粮包',cat:'消耗品',desc:'压得很实的饼子和肉干，关键时刻能顶几天。',use:'food'},
   scroll:{name:'征募文书',cat:'消耗品',desc:'盖了印的招募令，下次招兵少花一截钱。',use:'recruit'},
@@ -427,8 +430,8 @@ var MAPTYPE = {
     snip:'箱子翻出来一堆钱，还有几捆木料和几块铁。'},
   ruin:{name:'废墟',tag:'断墙残垣',atk:4,def:6,hp:26,main:'stone',sub:['wood','gem'],
     snip:'墙根下全是碎石，梁木还没烂透，土里挖出一块硬东西。'},
-  vein:{name:'矿脉',tag:'石缝透亮',atk:5,def:5,hp:24,main:'ore',sub:['stone','iron'],
-    snip:'矿脉露头，一镐下去崩下大片，边上还夹着好铁。'},
+  vein:{name:'矿脉',tag:'石缝透亮',atk:5,def:5,hp:24,main:'ore',sub:['iron','coal'],
+    snip:'矿脉露头，一镐下去崩下大片，边上还夹着好铁和黑煤。'},
   beast:{name:'兽群',tag:'爪痕很深',atk:7,def:2,hp:20,main:'hide',sub:['food','horse'],
     snip:'兽皮剥了整整几张，窝里还堆着没吃完的干肉。'},
   tomb:{name:'古墓',tag:'土腥味重',atk:8,def:6,hp:30,main:'gem',sub:['gold','charm'],
@@ -462,8 +465,6 @@ var NATURES = {
 var FLAG = ['#c4483f','#d1791f','#c98a1f','#74961f','#2f9e5e','#1f9fb0','#3b8fd4','#7a5a31','#8a5fa8','#3c4a5a'];
 var NAME_POOL = ['玄砚','林砚','陆知白','裴照','沈岑','苏无咎','闻人诀','霍临','谢亭','顾长歌'];
 var NPC_LORDS = ['铁齿·霍恩','雪线以北','老陈的锄头','第七日','沼泽不眠','黑石堡','麦浪骑士','断桅'];
-
-/* ===== 第 1 批到此结束，第 2 批接在这一行下面 ===== */
 
 /* ================= 工具 ================= */
 function ri(a, b){ return a + Math.floor(Math.random() * (b - a + 1)); }
@@ -600,13 +601,11 @@ function newGame(){
       farm: [1, 1, 1, 1, 1, 1],
       lumber: [],
       quarry: [],
-      ironmine: [],
-      coalmine: [],
       barracks: [1],
       wall: []
     },
-    special: { forge: 0, mine: 0, market: 0, stable: 0, watch: 0, shrine: 0 },
-    staff: { forge: null, mine: null, market: null, stable: null, watch: null, shrine: null },
+    special: { forge: 0, mine: 0, smelter: 0, colliery: 0, market: 0, stable: 0, watch: 0, shrine: 0 },
+    staff: { forge: null, mine: null, smelter: null, colliery: null, market: null, stable: null, watch: null, shrine: null },
     items: {},
     equip: { weapon: null, armor: null, charm: null },
     heroes: [],
@@ -673,6 +672,9 @@ function repair(d){
       return clamp(parseInt(v, 10) || 1, 1, 5);
     });
   }
+  for(var dead in d.builds){
+    if(!BUILD[dead]) delete d.builds[dead];
+  }
 
   if(!d.troops || typeof d.troops !== 'object') d.troops = n.troops;
   for(var t in n.troops){
@@ -694,8 +696,14 @@ function repair(d){
   d.energy.max = d.energy.max || 3;
   d.energy.cur = clamp(d.energy.cur | 0, 0, d.energy.max);
 
-  if(!d.special || typeof d.special !== 'object') d.special = n.special;
-  if(!d.staff || typeof d.staff !== 'object') d.staff = n.staff;
+  if(!d.special || typeof d.special !== 'object') d.special = {};
+  for(var sp in SPECIAL){
+    if(typeof d.special[sp] !== 'number') d.special[sp] = 0;
+  }
+  if(!d.staff || typeof d.staff !== 'object') d.staff = {};
+  for(var st in SPECIAL){
+    if(!(st in d.staff)) d.staff[st] = null;
+  }
   if(!d.items || typeof d.items !== 'object') d.items = {};
   if(!d.equip || typeof d.equip !== 'object') d.equip = n.equip;
   if(!d.flags || typeof d.flags !== 'object') d.flags = {};
@@ -918,8 +926,6 @@ var AUDIO = (function(){
   };
 })();
 
-/* ===== 第 2 批到此结束，第 3 批接在这一行下面 ===== */
-
 /* ================= 计算 ================= */
 var SLOT_NAME = { weapon: '武器', armor: '护甲', charm: '饰品' };
 
@@ -1035,10 +1041,17 @@ function lordEq(){
   });
   return { atk: a, def: d, luck: luck };
 }
+
+/* 特殊建筑：没人主持 = 完全停摆 */
 function specialRate(key){
   if(!S.special[key]) return 0;
-  return S.staff[key] ? 1 : 0.5;
+  if(!S.staff[key]) return 0;
+  return 1 + (S.special[key] - 1) * 0.35;
 }
+function hasStaff(key){
+  return !!(S.special[key] && S.staff[key]);
+}
+
 function wallDef(){
   var d = 0;
   S.builds.wall.forEach(function(lv){ d += lv * 6; });
@@ -1057,7 +1070,7 @@ function waterProd(){
 function waterNeed(){
   var n = S.pop * 0.5 + troopTotal() * 0.5 + S.heroes.length * 1;
   n *= (rule().waterNeed || 1);
-  if(S.special.shrine) n *= 0.85;
+  if(hasStaff('shrine')) n *= 0.85;
   return Math.round(n);
 }
 
@@ -1082,31 +1095,30 @@ function prod(){
     stone += 15 * f.stone * (r.stone || 1) * (1 + (lv - 1) * 0.35);
   });
 
-  var iron = 0, coal = 0;
-  S.builds.ironmine.forEach(function(lv){
-    iron += 2 * (1 + (lv - 1) * 0.3);
-    stone += 6 * (1 + (lv - 1) * 0.2);
-  });
-  S.builds.coalmine.forEach(function(lv){
-    coal += 3 * (1 + (lv - 1) * 0.3);
-    stone += 4 * (1 + (lv - 1) * 0.2);
-  });
+  var ore = hasStaff('mine') ? Math.round(4 * specialRate('mine') * (r.ore || 1)) : 0;
+  var coal = hasStaff('colliery') ? Math.round(3 * specialRate('colliery')) : 0;
+  var iron = hasStaff('forge') ? Math.round(2 * specialRate('forge')) : 0;
+  var gold = hasStaff('market') ? Math.round(30 * specialRate('market')) : 0;
+  var horse = hasStaff('stable') ? Math.round(1 * specialRate('stable') * (r.horse || 1)) : 0;
 
-  var ore = Math.floor(bSum('quarry') / 3) * (r.ore || 1);
-  var hide = Math.floor(bSum('lumber') / 3);
-  var horse = S.special.stable ? specialRate('stable') * (r.horse || 1) : 0;
+  var smelt = 0;
+  if(hasStaff('smelter')){
+    var capSmelt = Math.round(2 * specialRate('smelter'));
+    smelt = Math.min(capSmelt, Math.floor(countItem('ore') / 3));
+  }
 
   return {
     food: Math.round(food),
     water: waterProd(),
     wood: Math.round(wood),
     stone: Math.round(stone),
-    gold: S.special.market ? Math.round(30 * specialRate('market')) : 0,
-    iron: Math.round(iron) + (S.special.forge ? Math.round(2 * specialRate('forge')) : 0),
-    coal: Math.round(coal),
-    ore: ore + (S.special.mine ? Math.round(3 * specialRate('mine')) : 0),
-    hide: hide,
-    horse: horse
+    gold: gold,
+    iron: iron,
+    coal: coal,
+    ore: ore,
+    hide: 0,
+    horse: horse,
+    smelt: smelt
   };
 }
 function foodNeed(){
@@ -1368,7 +1380,7 @@ function renderAttr(){
   if(p.iron) html += line('精铁', '+' + p.iron);
   if(p.coal) html += line('煤炭', '+' + p.coal);
   if(p.ore) html += line('矿石', '+' + p.ore);
-  if(p.hide) html += line('兽皮', '+' + p.hide);
+  if(p.smelt) html += line('冶铁', '消耗矿石 ' + (p.smelt * 3) + ' → 精铁 +' + p.smelt);
   html += '</div>';
 
   html += '<div class="card">';
@@ -1383,17 +1395,13 @@ function renderAttr(){
   });
 }
 
-/* ===== 第 3 批到此结束，第 4 批接在这一行下面 ===== */
-
 /* ================= 建筑产出表 ================= */
 var BUILD_OUT = {
   house:    { main: '住人',     sub: '—' },
   well:     { main: '水',       sub: '—' },
   farm:     { main: '粮食',     sub: '—' },
-  lumber:   { main: '木材',     sub: '兽皮' },
-  quarry:   { main: '石料',     sub: '矿石' },
-  ironmine: { main: '精铁',     sub: '石料' },
-  coalmine: { main: '煤炭',     sub: '石料' },
+  lumber:   { main: '木材',     sub: '—' },
+  quarry:   { main: '石料',     sub: '—' },
   barracks: { main: '招兵折扣', sub: '—' },
   wall:     { main: '防守',     sub: '—' }
 };
@@ -1409,7 +1417,6 @@ function renderLand(){
     empty = false;
     html += '<div class="line"><span>' + BUILD[k].name +
       '<span class="sub" style="display:block">' + BUILD_OUT[k].main +
-      (BUILD_OUT[k].sub !== '—' ? '　副产 ' + BUILD_OUT[k].sub : '') +
       '</span></span><span class="v">' + bCount(k) + ' 座</span></div>';
     html += '<div class="sub" style="margin:-4px 0 6px">' + bSummary(k) + '</div>';
   }
@@ -1423,7 +1430,7 @@ function renderLand(){
     if(!S.special[s]) continue;
     has = true;
     var staff = S.staff[s];
-    var rateTxt = staff ? ('在位：' + staff.name) : '空缺（产出减半）';
+    var rateTxt = staff ? ('在位：' + staff.name) : '空缺（停摆）';
     html += '<div class="line"><span>' + SPECIAL[s].name +
       '<span class="sub" style="display:block">' + rateTxt + '</span></span>' +
       '<span class="v">' + SPECIAL[s].out + '</span></div>';
@@ -1460,7 +1467,7 @@ function renderLand(){
 }
 
 function openStaff(){
-  var html = '<div class="sub" style="margin-bottom:10px">把手艺人派到对应的建筑里，产出才满。</div>';
+  var html = '<div class="sub" style="margin-bottom:10px">把合适的人派进建筑，才会开工。空着的建筑完全停摆。</div>';
   for(var s in SPECIAL){
     if(!S.special[s]) continue;
     var cur = S.staff[s];
@@ -1471,20 +1478,26 @@ function openStaff(){
   }
   openSheet('人员安排', html, function(){
     $('sbody').querySelectorAll('[data-staff]').forEach(function(b){
-      b.onclick = function(){ pickStaff(b.dataset.staff); };
+      b.onclick = function(){ pickStaff(b.dataset.staff, false); };
     });
   });
 }
-function pickStaff(key){
-  var free = S.talents.filter(function(t){ return !isStaffed(t.id); });
-  if(!free.length){ toast('没有空闲的人手'); return; }
-  var html = '';
-  free.forEach(function(t){
-    html += '<div class="line"><span>' + t.name +
-      '<span class="sub" style="display:block">' + t.job + '　' + t.skill + '</span></span>' +
-      '<button class="btn sm" data-pick="' + t.id + '">派去</button></div>';
+function pickStaff(key, fromBuild){
+  var need = SPECIAL[key] ? SPECIAL[key].job : '';
+  var free = S.talents.filter(function(t){
+    return !isStaffed(t.id);
   });
-  openSheet(SPECIAL[key].name, html, function(){
+  if(!free.length){ toast('没有空闲的人手'); return; }
+  var html = '<div class="sub" style="margin-bottom:10px">' +
+    (need ? '这里要的是' + need + '。' : '') + '谁进去都行，对口的人干得更好。</div>';
+  free.forEach(function(t){
+    var good = (t.job === need);
+    html += '<div class="line"><span>' + t.name +
+      '<span class="sub" style="display:block">' + t.job + '　' + t.skill +
+      (good ? '　对口' : '') + '</span></span>' +
+      '<button class="btn sm' + (good ? '' : ' gray') + '" data-pick="' + t.id + '">派去</button></div>';
+  });
+  openSheet(SPECIAL[key] ? SPECIAL[key].name : '安排', html, function(){
     $('sbody').querySelectorAll('[data-pick]').forEach(function(b){
       b.onclick = function(){
         for(var i = 0; i < S.talents.length; i++){
@@ -1498,7 +1511,8 @@ function pickStaff(key){
         }
         save();
         closeSheet();
-        renderLand();
+        if(fromBuild) renderBuild();
+        else renderLand();
       };
     });
   });
@@ -1527,8 +1541,7 @@ function renderBuild(){
     html += '<h4>' + b.name + '　<span class="sub">' + cnt + ' 座</span></h4>';
     html += '<div class="sub">' + (cnt ? bSummary(k) : '还没建') + '</div>';
     html += '<div class="sub">' + b.desc + '</div>';
-    html += '<div class="sub" style="margin-top:4px">主产：' + BUILD_OUT[k].main +
-      (BUILD_OUT[k].sub !== '—' ? '　副产：' + BUILD_OUT[k].sub : '') + '</div>';
+    html += '<div class="sub" style="margin-top:4px">主产：' + BUILD_OUT[k].main + '</div>';
     html += '<div class="sub">建造一座：木 ' + bc.wood +
       (bc.stone ? '　石 ' + bc.stone : '') + '　精力 1</div>';
     if(cnt && !allMax){
@@ -1547,12 +1560,13 @@ function renderBuild(){
     html += '</div></div>';
   }
 
-  html += '<div class="card soft"><h4>特殊建筑</h4><div class="sub">需要图纸 + 专人。</div></div>';
+  html += '<div class="card soft"><h4>特殊建筑</h4><div class="sub">需要图纸，还要有人主持才转。</div></div>';
   for(var s in SPECIAL){
     var sp = SPECIAL[s];
     var own = !!S.special[s];
     var blue = countItem(sp.blue);
     var sw = Math.round(sp.wood * m), ss = Math.round(sp.stone * m);
+    var who = S.staff[s];
     html += '<div class="card">';
     html += '<h4>' + sp.name + '　<span class="sub">' + (own ? '已建成' : '未建') + '</span></h4>';
     html += '<div class="sub">' + sp.out + '</div>';
@@ -1562,7 +1576,9 @@ function renderBuild(){
     if(!own){
       html += '<button class="btn sm" data-spec="' + s + '">开工　精力 1</button>';
     }else{
-      html += '<span class="sub" style="align-self:center">需要' + sp.job + '</span>';
+      html += '<span class="sub" style="align-self:center">' +
+        (who ? '在位：' + esc(who.name) : '空缺（停摆）') + '</span>';
+      html += '<button class="btn sm ghost" data-post="' + s + '">' + (who ? '换人' : '派人') + '</button>';
       if(s === 'forge') html += '<button class="btn sm ghost" data-forgeopen="1">强化装备　精力 1</button>';
     }
     html += '</div></div>';
@@ -1581,6 +1597,9 @@ function renderBuild(){
     });
     body.querySelectorAll('[data-spec]').forEach(function(b){
       b.onclick = function(){ doSpecialBuild(b.dataset.spec); };
+    });
+    body.querySelectorAll('[data-post]').forEach(function(b){
+      b.onclick = function(){ pickStaff(b.dataset.post, true); };
     });
     var fo = body.querySelector('[data-forgeopen]');
     if(fo) fo.onclick = function(){ openForge(); };
@@ -1656,18 +1675,27 @@ function doSpecialBuild(key){
   S.special[key] = 1;
   S.staff[key] = null;
   AUDIO.play('build');
-  saySys(sp.name + '落成了。还缺一个' + sp.job + '。');
+  saySys(sp.name + '落成了，可屋里空着——还缺一个' + sp.job + '。');
   save();
   renderBar();
   renderBuild();
+  setTimeout(function(){
+    if(S.talents.length) toast('去「领地」里安排人手，这里才转得起来');
+  }, 700);
 }
 
 /* ================= 铁匠铺 ================= */
 function forgeCost(plus){
-  return { gold: 100 * (plus + 1), iron: 2 * (plus + 1), coal: plus + 1 };
+  var c = { gold: 100 * (plus + 1), iron: 2 * (plus + 1), coal: plus + 1 };
+  if(plus >= 2) c.gem = 1;
+  return c;
 }
 function openForge(){
-  var html = '<div class="sub">用精铁和煤把已经上身的家伙再锻一遍。每级属性 +50%，最多 +3。</div>';
+  if(!hasStaff('forge')){
+    toast('铁匠铺空着，得先有个铁匠主持');
+    return;
+  }
+  var html = '<div class="sub">用精铁和煤把已经上身的家伙再锻一遍。每级属性 +50%，最多 +3。锻第三级要一块魔晶。</div>';
   var list = [];
   ['weapon', 'armor', 'charm'].forEach(function(s){
     if(S.equip[s]) list.push({ who: 'lord', name: S.lord.name, slot: s, e: S.equip[s] });
@@ -1690,7 +1718,8 @@ function openForge(){
       html += '<span class="sub">已到顶</span>';
     }else{
       html += '<button class="btn sm" data-forge="' + x.who + '|' + x.slot + '">+1　' +
-        c.gold + '金 ' + c.iron + '铁 ' + c.coal + '煤</button>';
+        c.gold + '金 ' + c.iron + '铁 ' + c.coal + '煤' +
+        (c.gem ? ' ' + c.gem + '晶' : '') + '</button>';
     }
     html += '</div>';
   });
@@ -1704,6 +1733,7 @@ function openForge(){
   });
 }
 function doForge(who, slot){
+  if(!hasStaff('forge')){ toast('铁匠铺空着'); return; }
   var tgt = null;
   if(who === 'lord') tgt = S.equip;
   else{
@@ -1718,20 +1748,21 @@ function doForge(who, slot){
   if(S.res.gold < c.gold){ toast('金币不够'); AUDIO.play('fail'); return; }
   if(countItem('iron') < c.iron){ toast('精铁不够'); AUDIO.play('fail'); return; }
   if(countItem('coal') < c.coal){ toast('煤炭不够'); AUDIO.play('fail'); return; }
+  if(c.gem && countItem('gem') < c.gem){ toast('还差一块魔晶'); AUDIO.play('fail'); return; }
   if(S.energy.cur < 1){ toast('精力不够，明天再说'); AUDIO.play('fail'); return; }
   S.res.gold -= c.gold;
   takeItem('iron', c.iron);
   takeItem('coal', c.coal);
+  if(c.gem) takeItem('gem', c.gem);
   S.energy.cur -= 1;
   tgt[slot].plus = plus + 1;
   AUDIO.play('build');
-  saySys(ITEMS[tgt[slot].id].name + '过了第二遍火，锻到 +' + (plus + 1) + '。');
+  saySys(ITEMS[tgt[slot].id].name + (c.gem ? '压进一块魔晶，' : '过了第二遍火，') +
+    '锻到 +' + (plus + 1) + '。');
   save();
   renderBar();
   openForge();
 }
-
-/* ===== 第 4 批到此结束，第 5 批接在这一行下面 ===== */
 
 /* ================= 人名 ================= */
 var SUR = ['王','李','赵','陈','杨','周','吴','徐','孙','马','韩','郭','何','高','罗'];
@@ -2011,7 +2042,7 @@ function doRecruit(k){
   AUDIO.play('crowd');
   saySys('营里添了 ' + n + ' 个' + TROOP[k].name + '。');
   var tp = S.lord.nature === 'kind' ? 0.08 : 0.05;
-  if(chance(tp * 0.5)) addTalent();
+  if(chance(tp)) addTalent();
   if(chance(0.01)) addHero();
   save();
   renderBar();
@@ -2044,8 +2075,6 @@ function doPromote(k){
   renderBar();
   renderCamp();
 }
-
-/* ===== 第 5 批到此结束，第 6 批接在这一行下面 ===== */
 
 /* ================= 地图 ================= */
 var RES_NAME = { gold: '金币', wood: '木材', stone: '石料', food: '粮食', water: '水' };
@@ -2123,7 +2152,7 @@ function doScout(i){
   if(!m) return;
   if(m.scouted){ toast('早看过了'); return; }
   if(S.scout <= 0){ toast('今天看过的地方够多了'); AUDIO.play('fail'); return; }
-  var free = !!S.special.watch;
+  var free = hasStaff('watch');
   if(!free && S.energy.cur < 1){ toast('精力不够，明天再说'); AUDIO.play('fail'); return; }
   S.scout -= 1;
   if(!free) S.energy.cur -= 1;
@@ -2208,7 +2237,7 @@ function rollBox(){
     addItem(id, n);
   }
   if(chance(box.bp)){
-    var pool = ['bp_forge', 'bp_mine', 'bp_market', 'bp_stable', 'bp_watch', 'bp_shrine'];
+    var pool = ['bp_forge', 'bp_mine', 'bp_smelter', 'bp_colliery', 'bp_market', 'bp_stable', 'bp_watch', 'bp_shrine'];
     for(var t in TROOP_BP){
       if(!S.unlocked[t]) pool.push(TROOP_BP[t]);
     }
@@ -2379,25 +2408,30 @@ var EVENTS = [
 function doEndDay(){
   if(busy) return;
   busy = true;
-  try{
-    var p = prod();
-    var need = foodNeed();
-    var wNeed = waterNeed();
+  NO_LOG = true;
+  var p = prod();
+  var need = foodNeed();
+  var wNeed = waterNeed();
+  S.res.food += p.food - need;
+  S.res.water += p.water - wNeed;
+  S.res.wood += p.wood;
+  S.res.stone += p.stone;
+  S.res.gold += p.gold;
+  if(p.iron) addItem('iron', p.iron);
+  if(p.coal) addItem('coal', p.coal);
+  if(p.ore) addItem('ore', p.ore);
 
-    S.res.wood += p.wood;
-    S.res.stone += p.stone;
-    S.res.gold += p.gold;
-    if(p.iron) addItem('iron', p.iron);
-    if(p.coal) addItem('coal', p.coal);
-    if(p.ore) addItem('ore', p.ore);
-    if(p.hide) addItem('hide', p.hide);
-    if(p.horse && chance(Math.min(1, p.horse))){
-      addItem('horse', Math.max(1, Math.ceil(p.horse)));
+  if(p.smelt){
+    var canSmelt = Math.min(p.smelt, Math.floor(countItem('ore') / 3));
+    if(canSmelt > 0){
+      takeItem('ore', canSmelt * 3);
+      addItem('iron', canSmelt);
     }
+  }
 
-    S.res.food += p.food - need;
-    S.res.water += p.water - wNeed;
-
+  if(p.hide) addItem('hide', p.hide);
+  if(p.horse && chance(0.35 * (rule().horse || 1))) addItem('horse', 1);
+  try{
     sayDay();
 
     if(S.res.food < 0){
@@ -2415,7 +2449,7 @@ function doEndDay(){
         S.pop = Math.min(houseCap(), S.pop + grow);
         say('日子还过得去，添了 ' + grow + ' 口人。', 'good');
       }
-      S.morale = clamp(S.morale + (S.special.shrine ? 2 : 1), 0, 100);
+      S.morale = clamp(S.morale + (hasStaff('shrine') ? 2 : 1), 0, 100);
     }
 
     if(S.res.water < 0){
@@ -2437,6 +2471,8 @@ function doEndDay(){
     if(p.stone) say('石料 +' + p.stone + '。');
     if(p.iron) say('精铁 +' + p.iron + '。');
     if(p.coal) say('煤炭 +' + p.coal + '。');
+    if(p.ore) say('矿石 +' + p.ore + '。');
+    if(p.smelt > 0) say('冶铁坊开了一炉，' + (p.smelt * 3) + ' 份矿石炼成 ' + p.smelt + ' 块精铁。', 'good');
     if(p.gold) say('市集收上来 ' + p.gold + ' 枚金币。');
 
     if(rule().foodLoss && S.res.food > 0){
@@ -2461,18 +2497,10 @@ function doEndDay(){
 
     raidCheck();
 
-    S.energy.max = 3 + (S.special.shrine ? 1 : 0);
+    S.energy.max = 3 + (hasStaff('shrine') ? 1 : 0);
     S.energy.cur = S.energy.max;
     S.day += 1;
     S.scout = scoutMax();
-
-    if(S.day % 7 === 0){
-      var ks = Object.keys(ENV_NAME).filter(function(x){ return x !== S.env; });
-      S.env = pick(ks);
-      AUDIO.setEnv(S.env);
-      saySys('你在路上走了几天，地界换了。这里是' + ENV_NAME[S.env] + '。');
-      S.scout = scoutMax();
-    }
 
     var chDay = rule().channelDay || 30;
     if(S.day >= chDay && !S.flags.chOpen){
@@ -2488,8 +2516,6 @@ function doEndDay(){
   busy = false;
   setTimeout(function(){ maybeEvent(); }, 700);
 }
-
-/* ===== 第 6 批到此结束，第 7 批接在这一行下面 ===== */
 
 /* ================= 世界频道 ================= */
 function ensureWorld(){
@@ -2550,7 +2576,7 @@ function renderChannel(){
     html += '<div class="chatmsg' + (m.me ? ' me' : '') + '"><span class="who">' +
       esc(m.who) + '</span>　' + esc(m.text) + '</div>';
   }
-  html += '<div id="chatin"><input id="chtext" maxlength="60" placeholder="说点什么" />' +
+  html += '<div id="chatin"><input id="chtext" placeholder="说点什么" />' +
     '<button id="chsend">发</button></div>';
   box.innerHTML = html;
   $('chsend').onclick = sendChannel;
@@ -2891,24 +2917,28 @@ function bindSaveIO(){
   $('ioclose').onclick = function(){ $('saveio').classList.remove('on'); };
 }
 
-/* ===== 第 7 批到此结束，第 8 批接在这一行下面 ===== */
-
 /* ================= 攻略 ================= */
 function renderHelp(){
   var r = rule();
   var h = '';
   h += '<h3>每天在做什么</h3>';
-  h += '<p>所有事都吃精力。建造一座 1 格，单座升级 1 格，全部升级 2 格，招一次兵 1 格，兵种晋升 1 格，锻造 1 格，侦查 1 格，出征 1 格。上限 3 格，神殿建成 4 格，天亮回满。</p>';
+  h += '<p>所有事都吃精力。建造一座 1 格，单座升级 1 格，全部升级 2 格，招一次兵 1 格，兵种晋升 1 格，锻造 1 格，侦查 1 格，出征 1 格。上限 3 格，神殿建成并且有祭司主持才是 4 格，天亮回满。</p>';
 
   h += '<h3>粮和水</h3>';
   h += '<p>人每天吃 1 份粮、喝半桶水；兵各两份；英雄各五份。粮见底会走人，水见底会多耗三成粮、再走掉半成人。水和粮一样要提前备。</p>';
-  h += '<p>水靠水井出，也可以在出征时从「河湾」「暗河」打回来，下雨也算。</p>';
+  h += '<p>水靠水井出，也可以在出征时从「河湾」「暗河」打回来。</p>';
 
   h += '<h3>地形</h3>';
-  h += '<p>开局随机落在八种地形之一，每种都有一条增益和一条惩罚。当前是' + ENV_NAME[S.env] + '：' + r.good + '；' + r.bad + '。每七天换一次地方。</p>';
+  h += '<p>开局随机落在八种地形之一，每种都有一条增益和一条惩罚。当前是' + ENV_NAME[S.env] + '：' + r.good + '；' + r.bad + '。落地即定，这一局不会再换。</p>';
 
   h += '<h3>产出</h3>';
-  h += '<p>每座建筑都有主产和副产。水井出水，伐木场出木材副产兽皮，采石场出石料副产矿石，铁矿洞出精铁副产石料，煤矿洞出煤炭副产石料。副产按座数折算。</p>';
+  h += '<p>基础建筑各管一摊，互不越界：农田出粮，水井出水，伐木场出木，采石场出石。谁也不会顺带产出别人的东西。</p>';
+  h += '<p>特殊建筑要图纸，还要有人主持。空着的特殊建筑<b>完全不产出</b>，也不提供任何加成。</p>';
+
+  h += '<h3>特殊建筑</h3>';
+  h += '<p>铁匠铺要铁匠，每日出精铁，还能强化装备；矿场要矿工，每日出矿石；冶铁坊要铁匠，每 3 份矿石炼 1 块精铁；煤窑要矿工，每日出煤炭。</p>';
+  h += '<p>市集要商人，每日收金币；马厩要驯马师，每日出马；瞭望塔要斥候，侦查不耗精力；神殿要祭司，每日涨民心、全境耗水降一成五。</p>';
+  h += '<p>人从哪里来：招兵时偶尔会有人留下，路过的事件里也有人愿意效力。安排人手的入口在「领地」页。</p>';
 
   h += '<h3>建筑</h3>';
   h += '<p>每座单独算等级，最高 5 级。想省钱就一座座升，想快就全部一起升，材料按座数叠。</p>';
@@ -2917,10 +2947,10 @@ function renderHelp(){
   h += '<p>开局只能选一种兵。其余三种要靠开箱出的兵营图开营。兵分初级、中级、高级三档，打出来了经验才能晋升。</p>';
 
   h += '<h3>出征</h3>';
-  h += '<p>先侦查，看清了才能打。一个地方最多打三次，掏空之后原地换一批新东西，重新变成问号。有英雄就能让他带队。越硬的地方，经验和战利品越多。</p>';
+  h += '<p>先侦查，看清了才能打。没侦查过的地方只有问号，看不出是什么。一个地方最多打三次，掏空之后原地换一批新东西，重新变成问号，要再侦查一次。有英雄就能让他带队。</p>';
 
   h += '<h3>瞭望塔</h3>';
-  h += '<p>建起来以后，侦查不再消耗精力，但次数照扣，也仍然要先侦查才能出征。</p>';
+  h += '<p>建起来，并且派了一个斥候进去，侦查才不再消耗精力。次数照扣，也仍然要先侦查才能出征。</p>';
 
   h += '<h3>民心</h3>';
   h += '<p>民心 70 以上，出征攻击 +10%；30 以下，攻击 -10%。神殿、挡下夜袭、好事都会让民心涨。</p>';
@@ -2929,7 +2959,7 @@ function renderHelp(){
   h += '<p>第 8 天起，每天晚上有一成多的概率有人摸过来。城墙防御加三成兵力防御，挡得住就没事，挡不住要丢木石粮和人。</p>';
 
   h += '<h3>路上遇见的事</h3>';
-  h += '<p>每天结束时有三成半的概率出点事，屏幕中间会弹一个窗，给你三个选择。没有白拿的选项，每个都有代价。接了 AI 的话，这些事可能是它按你的处境现编的。</p>';
+  h += '<p>每天结束时有三成半的概率出点事，屏幕中间会弹一个窗，给你几个选择。没有白拿的选项，每个都有代价。接了 AI 的话，这些事可能是它按你的处境现编的。</p>';
 
   h += '<h3>存档</h3>';
   h += '<p>存在这台设备的浏览器里，包括叙事记录。换设备前，去右上角「⚙」里点「存档码」复制走。</p>';
@@ -3076,8 +3106,6 @@ function bindSet(){
   $('setclose').onclick = function(){ $('setpage').classList.remove('on'); };
 }
 
-/* ===== 第 8 批到此结束，第 9 批接在这一行下面 ===== */
-
 /* ================= 本地事件（上） ================= */
 var EVT = [
   { t: '过路的商队',
@@ -3195,7 +3223,11 @@ var EVT = [
       { l: '烧掉一片田挡它', e: [['res','food',-120],['morale',1]] },
       { l: '带人日夜驱赶', e: [['res','food',-60],['morale',4]] },
       { l: '认了', e: [['res','food',-260],['morale',-6]] }
-    ] },
+    ] }
+];
+
+/* ================= 本地事件（中） ================= */
+EVT = EVT.concat([
   { t: '山塌了半边',
     d: '后山塌下来，把去镇上的路埋了，也把泉眼堵了。',
     o: [
@@ -3302,7 +3334,7 @@ var EVT = [
       { l: '埋了', e: [['morale',2]] },
       { l: '不管', e: [] }
     ] }
-];
+]);
 
 /* ================= 本地事件（下） ================= */
 EVT = EVT.concat([
@@ -3664,8 +3696,6 @@ function maybeEvent(){
   }
 }
 
-/* ===== 第 10 批到此结束，第 11 批接在这一行下面 ===== */
-
 /* ================= 人物创建 ================= */
 function showCreate(){
   CR = {
@@ -3793,7 +3823,7 @@ function renderAct(){
   html += '<div class="sub">精力 ' + S.energy.cur + ' / ' + S.energy.max +
     '　侦查 ' + S.scout + ' / ' + scoutMax() + '</div>';
   html += '<div class="sub">侦查和出征各吃一格精力' +
-    (S.special.watch ? '，有瞭望塔，侦查不用精力' : '') + '。</div>';
+    (hasStaff('watch') ? '；塔上有人，侦查不收精力' : '') + '。</div>';
   html += '</div>';
 
   html += '<div class="map">';
@@ -3828,7 +3858,7 @@ function renderAct(){
     html += '<div class="btns">';
     if(!known){
       html += '<button class="btn sm" data-scout="' + sel.i + '">侦查　' +
-        (S.special.watch ? '不耗精力' : '精力 1') + '</button>';
+        (hasStaff('watch') ? '不耗精力' : '精力 1') + '</button>';
     }else{
       html += '<button class="btn sm" data-march="' + sel.i + '">出征　精力 1</button>';
     }
@@ -3985,6 +4015,7 @@ function startGame(){
   if(S.scout > scoutMax()) S.scout = scoutMax();
   renderLog();
   var tk = S.lord.troop || 'militia';
+  if(!S.troops[tk]) tk = 'militia';
   if(!S.flags.intro){
     S.flags.intro = true;
     sayDay();
